@@ -1,0 +1,17 @@
+.searchResult {
+    background-color: lightblue;
+    padding: 4px;
+    margin: 0px;
+    border: 1px solid grey;
+    /* border-radius: 4px; */
+    width: 100%;
+}
+
+.searchResult:hover {
+    background-color: lightpink;
+    cursor: pointer;
+}
+
+.searchBox {
+    width: 600px;
+}

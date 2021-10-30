@@ -4,6 +4,8 @@ if (process.env.NODE_ENV !== "production") {
 
 const express = require('express');
 const mongoose = require('mongoose');
+const cors = require('cors');
+
 const { ApolloServer } = require('apollo-server-express');
 const resolvers = require('./graphql/resolvers.js');
 const typeDefs = require('./graphql/schema.js');
@@ -31,6 +33,8 @@ const app = express();
     await server.start();
     server.applyMiddleware({ app });
 })();
+
+app.use(cors());
 
 app.get('/', (req, res) => {
     console.log("GraphQL server is ready");

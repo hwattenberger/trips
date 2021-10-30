@@ -16,6 +16,7 @@ const typeDefs = gql`
         dayLength: Int
         user: User
         description: String
+        legs: [Leg]
     }
 
     type Leg {
@@ -116,7 +117,8 @@ const typeDefs = gql`
         allUsers: [User!]!
         findUserByEmail(email: String!): User
         allTrips: [Trip!]!
-        findTripsByUser: [Trip!]!
+        findTripsByUser(userId: String!): [Trip!]!
+        findTripById(_id: String!): Trip!
     }
 
     type Mutation {

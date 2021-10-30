@@ -1,0 +1,16 @@
+.calDiv {
+    display: flex;
+    max-width: 200px;
+    align-items: center;
+    height: 1.5em;
+}
+
+.calDiv span {
+    margin-right: 4px;
+    /* margin-top: 16px; */
+}
+
+.calDiv input {
+    border: none;
+    border-bottom: 1px solid black;
+}
