@@ -18,6 +18,7 @@ interface latLng {
 export const TripMap: React.FC<TripMapProps> = ({ lng, lat }) => {
     const mapContainer = useRef<null | HTMLDivElement>(null);
     const map = useRef<null | mapboxgl.Map>(null);
+    const marker = useRef<null | mapboxgl.Marker>();
     // const [lng, setLng] = useState(-70.9);
     // const [lat, setLat] = useState(42.35);
     const [zoom, setZoom] = useState(5);
@@ -32,7 +33,8 @@ export const TripMap: React.FC<TripMapProps> = ({ lng, lat }) => {
             zoom: zoom
         });
 
-        const tempMark = new mapboxgl.Marker({
+        console.log("getting here?", lng, lat)
+        marker.current = new mapboxgl.Marker({
             color: '#00000',
             // draggable: true
         }).setLngLat([lng, lat])
@@ -48,9 +50,12 @@ export const TripMap: React.FC<TripMapProps> = ({ lng, lat }) => {
 
     useEffect(() => {
         if (map.current) {
+            console.log("getting here also?", lng, lat)
             map.current.flyTo({
                 center: [lng, lat]
             })
+
+            if (marker.current) marker.current.setLngLat([lng, lat])
         }
     }, [lat, lng])
 

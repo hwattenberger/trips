@@ -1,50 +1,81 @@
-import React, { ChangeEvent, useEffect, useState } from 'react'
-import axios from "axios";
+import React, { ChangeEvent, useEffect } from 'react'
 
-import { TripMap } from './TripMap';
 import Calendar from "./Calendar"
 import { Input } from "./../styles/general"
 import { Search } from './Search';
+import { NewActivity } from './NewActivity';
+
+import { Activity, Leg, Location } from './NewTrip';
 
 interface NewLegProps {
     startDt: Date | undefined,
-    endDt: Date | undefined
+    endDt: Date | undefined,
+    legInfo: Leg,
+    updateLeg: (updatedLeg: Leg) => void,
+    ix: number
 }
 
-const emptyLeg = {
-    comments: "",
-    rating: 0
-}
+// const emptyLeg = {
+//     comments: "",
+//     rating: 0
+// }
 
-const NewLeg: React.FC<NewLegProps> = ({ startDt, endDt }) => {
-    const [tripFrom, setTripFrom] = useState<Date | undefined>(startDt);
-    const [tripTo, setTripTo] = useState<Date | undefined>();
-    const [legInfo, setLegInfo] = useState(emptyLeg);
-    const [location, setLocation] = useState("");
+const NewLeg: React.FC<NewLegProps> = ({ startDt, endDt, updateLeg, ix, legInfo }) => {
+
+    // const [location, setLocation] = useState("");
 
     useEffect(() => {
-        setTripFrom(startDt);
+        setLegFrom(startDt);
     }, [startDt]);
 
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
-        setLegInfo({ ...legInfo, [e.target.name]: e.target.value });
+        updateLeg({ ...legInfo, [e.target.name]: e.target.value });
     }
 
-    // const onLocationChange = (e: ChangeEvent<HTMLInputElement>) => {
-    //     setLocation(e.target.value);
-    //     if (e.target.value.length > 3) search();
-    // }
+    const setLegFrom = (val: Date | undefined) => {
+        updateLeg({ ...legInfo, "legFrom": val });
+    }
+
+    const setLegTo = (val: Date | undefined) => {
+        updateLeg({ ...legInfo, "legTo": val });
+    }
+
+    const createActivity = (newActivity: Activity) => {
+        updateLeg({ ...legInfo, activities: [...legInfo.activities, newActivity] });
+    }
+
+    const setLocation = (newLocation: MapboxGeocoder.Result) => {
+        let country_short_code = "";
+        const updatedLoc: Location = {
+            place_name: newLocation.place_name,
+            center: [...newLocation.center],
+            mapboxId: newLocation.id,
+            bbox: [...newLocation.bbox]
+        }
+
+        for (let i = 0; i < newLocation.context.length && !country_short_code; i++) {
+            if (newLocation.context[i].id.includes("country")) country_short_code = newLocation.context[i].short_code;
+        }
+        if (country_short_code) updatedLoc.country_short_code = country_short_code;
+
+        console.log("location", updatedLoc)
+        updateLeg({ ...legInfo, "location": updatedLoc });
+    }
+
+    const activityIcon = (type: string): string => {
+        if (type === "poi") return "🏰";
+        if (type === "food") return "🍜";
+        return "⛵";
+    }
 
     return (
         <div className="newTripLegDiv">
-            <h2>Leg 1</h2>
+            <h2>Leg {ix + 1}</h2>
             <div className="tripForm">
-                {/* <div className="formRow"> */}
-                <Search />
-                {/* </div> */}
+                <Search setLocation={setLocation} location={legInfo.location} />
                 <div className="formRow">
-                    <Calendar from={tripFrom} to={tripTo} setFrom={setTripFrom} setTo={setTripTo} minDate={startDt} maxDate={endDt} />
+                    <Calendar from={legInfo.legFrom} to={legInfo.legTo} setFrom={setLegFrom} setTo={setLegTo} minDate={startDt} maxDate={endDt} />
                 </div>
                 <div className="formRow">
                     <label>
@@ -52,8 +83,14 @@ const NewLeg: React.FC<NewLegProps> = ({ startDt, endDt }) => {
                         <div><textarea id="comments" name="comments" rows={3} placeholder="Details on this leg of the trip" value={legInfo.comments} onChange={onInputChange} /></div>
                     </label>
                 </div>
+                <div className="formRow">
+                    Activities:
+                    {legInfo.activities.map((activity, ix) => (
+                        <div key={ix}>{activityIcon(activity.type)} - {activity.place}</div>
+                    ))}
+                    <NewActivity createActivity={createActivity} />
+                </div>
             </div>
-            {/* <TripMap /> */}
         </div>
     );
 }

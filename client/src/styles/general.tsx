@@ -10,4 +10,5 @@ export const Input = styled.input<InputProps>`
     padding: 4px;
     width: ${(props) => props.width ? props.width : 'inherit'};
     font-size: 16px;
+    background-color: inherit;
 `
