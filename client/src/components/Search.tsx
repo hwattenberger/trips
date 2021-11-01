@@ -1,16 +1,16 @@
 import React, { ChangeEvent, useEffect, useState, useMemo } from 'react'
 import axios from "axios";
 
-import { Input } from "./../styles/general"
-import { TripMap } from './TripMap';
-import './Search.css'
+import { Input } from "./../styles/general";
+import { StaticPointOnMap } from './StaticPointOnMap';
+import './Search.css';
 import debounce from 'lodash.debounce';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
-import { Location } from './NewTrip';
+import { LocationI } from './../utility/types';
 
 interface SearchProps {
     setLocation: (newLoc: MapboxGeocoder.Result) => void,
-    location: Location | null
+    location: LocationI | null
 }
 
 interface SearchObject {
@@ -68,7 +68,7 @@ export const Search: React.FC<SearchProps> = ({ setLocation, location }) => {
         <div className="searchBox">
             <div className="searchInput">
                 <label>Location:
-                    <Input type="text" id="search" name="search" width="100%" placeholder="Search" onChange={onSearchStringChange} value={searchStr} />
+                    <Input type="text" id="search" name="search" width="100%" placeholder="Search" onChange={onSearchStringChange} value={searchStr} autoComplete="off" />
                 </label>
             </div>
             {searchOptions.map((result, ix) => (
@@ -76,8 +76,8 @@ export const Search: React.FC<SearchProps> = ({ setLocation, location }) => {
                     {result.place_name}
                 </div>
             ))}
-            {searchOptions.length > 0 && !location && <TripMap lng={searchOptions[0].center[0]} lat={searchOptions[0].center[1]} />}
-            {location && <TripMap lng={location.center[0]} lat={location.center[1]} />}
+            {searchOptions.length > 0 && !location && <StaticPointOnMap lng={searchOptions[0].center[0]} lat={searchOptions[0].center[1]} />}
+            {location && <StaticPointOnMap lng={location.center[0]} lat={location.center[1]} />}
         </div>
     );
 }

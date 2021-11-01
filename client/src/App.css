@@ -10,6 +10,10 @@
     margin-top: 8px;
 }
 
+.tripForm .formRow.no-top-margin {
+    margin-top: 0px;
+}
+
 .tripForm input {
     margin-right: 10px;
 }
@@ -17,6 +21,10 @@
 .tripForm textarea {
     width: 97%;
     background-color: inherit;
+}
+
+.formRow.travelBetweenBtnRow .MuiButton-root {
+    margin: 2px;
 }
 
 /* .tripForm .formRow {
@@ -39,6 +47,11 @@
     margin: 10px 0px;
 }
 
+.travelBetween {
+    margin: 10px 50px;
+    text-align: center;
+}
+
 h2 {
     margin-top: 0px;
     margin-bottom: 6px;
@@ -50,8 +63,24 @@ h2 {
 }
 
 .newActivity {
-    border: 2px solid black;
+    /* border: 2px solid black; */
     padding: 4px;
+    background-color: rgb(255, 255, 255, .25);
+    margin-top: 6px;
+    border-radius: 4px;
+}
+
+.newActivity .activityTopRow {
+    display: flex;
+    align-items: center;
+}
+
+.activityTopRow .flexend {
+    margin-left: auto;
+}
+
+.activityTopRow .MuiButton-root {
+    margin: 2px;
 }
 
 @media (min-width: 1100px) {

@@ -10,10 +10,10 @@ const resolvers = {
         findUserByEmail: async (root, args) => await User.findOne({email: args.email}),
         allTrips: async () => await Trip.find({}).populate({path:'user'}),
         findTripsByUser: async (root, args) => await Trip.findOne({user: args.userId}),
-        findTripById: async (root, args) => await Trip.findById(args._id),
+        findTripById: async (root, args) => await Trip.findById(args._id).populate({path:'legs'}),
     },
     // Trip: {
-    //     user: (root) => {
+    //     legs: (root) => {
     //         console.log("Hi2", root)
     //     }
     // },

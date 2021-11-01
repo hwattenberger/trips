@@ -1,11 +1,12 @@
 import React, { useState, ChangeEvent } from 'react'
-import { Rating, Select, MenuItem, Button, SelectChangeEvent } from '@mui/material';
-import { Activity } from './NewTrip';
+import { Rating, Button, SelectChangeEvent } from '@mui/material';
+
+import { ActivityI } from './../utility/types';
 
 import { Input } from "./../styles/general"
 
 interface NewActivityProps {
-    createActivity: (newActivity: Activity) => void
+    createActivity: (newActivity: ActivityI) => void
     // setActivities: React.Dispatch<React.SetStateAction<Activity[]>>
 }
 
@@ -17,7 +18,7 @@ const defaultActivity = {
 }
 
 export const NewActivity: React.FC<NewActivityProps> = ({ createActivity }) => {
-    const [newActivity, setNewActivity] = useState<Activity>(defaultActivity);
+    const [newActivity, setNewActivity] = useState<ActivityI>(defaultActivity);
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement> | SelectChangeEvent<string>) => {
         setNewActivity({ ...newActivity, [e.target.name]: e.target.value });
@@ -36,35 +37,50 @@ export const NewActivity: React.FC<NewActivityProps> = ({ createActivity }) => {
         setNewActivity(defaultActivity);
     }
 
-    const isButtonDisabled = () => {
-        if (newActivity.type && newActivity.place) return null;
-        return "disabled";
+    const toggleType = (e: React.MouseEvent<HTMLButtonElement>): void => {
+        setNewActivity({ ...newActivity, type: e.currentTarget.name })
     }
+
+    const isSelectedVariant = (type: string) => {
+        if (type === newActivity.type) return "contained";
+        return "outlined";
+    }
+
+    // const isButtonDisabled = () => {
+    //     if (newActivity.type && newActivity.place) return null;
+    //     return "disabled";
+    // }
 
     return (
         <div className="newActivity">
-            Add Activity:
-            <div className="formRow">
-                <Select value={newActivity.type} name="type" size="small" onChange={onInputChange}>
-                    <MenuItem value="poi">🏰 Point of Interest</MenuItem>
-                    <MenuItem value="food">🍜 Food</MenuItem>
-                    <MenuItem value="other">⛵ Other Activity</MenuItem>
-                </Select>
-                <Rating name="rating" value={newActivity.rating} onChange={onRatingChange} />
-                <div className="formRow">
-                    <label>Place:
-                        <Input type="text" id="place" name="place" width="30rem" value={newActivity.place} onChange={onInputChange} autoComplete="off" />
-                    </label>
-                </div>
-                <div className="formRow">
-                    <label>
-                        Comments:
-                        <div><textarea id="comments" name="comments" rows={3} value={newActivity.comments} onChange={onInputChange} /></div>
-                    </label>
-                </div>
-                {newActivity.type && newActivity.place && <Button variant="contained" size="small" onClick={onClickAddActivity}>Add</Button>}
-                {(!newActivity.type || !newActivity.place) && <Button variant="contained" size="small" disabled onClick={onClickAddActivity}>Add</Button>}
+            <span>Add Activity</span>
+            <div className="formRow activityTopRow">
+                {/* <span>Add Activity</span> */}
+                <Button variant={isSelectedVariant("poi")} size="small" name="poi" onClick={toggleType}>🏰 Point of Interest</Button>
+                <Button variant={isSelectedVariant("food")} size="small" name="food" onClick={toggleType}>🍜 Food</Button>
+                <Button variant={isSelectedVariant("other")} size="small" name="other" onClick={toggleType}>⛵ Other Activity</Button>
+                {/* <FormControl sx={{ m: 1, minWidth: 120 }}>
+                    <Select value={newActivity.type} name="type" size="small" onChange={onInputChange}>
+                        <MenuItem value="poi">🏰 Point of Interest</MenuItem>
+                        <MenuItem value="food">🍜 Food</MenuItem>
+                        <MenuItem value="other">⛵ Other Activity</MenuItem>
+                    </Select>
+                </FormControl> */}
+                <Rating name="rating" value={newActivity.rating} onChange={onRatingChange} className="flexend" />
             </div>
+            <div className="formRow">
+                <label>Place:
+                    <Input type="text" id="place" name="place" width="30rem" value={newActivity.place} onChange={onInputChange} autoComplete="off" />
+                </label>
+            </div>
+            <div className="formRow">
+                <label>
+                    Comments:
+                    <div><textarea id="comments" name="comments" rows={3} value={newActivity.comments} onChange={onInputChange} /></div>
+                </label>
+            </div>
+            {newActivity.type && newActivity.place && <Button variant="contained" size="small" onClick={onClickAddActivity}>Add</Button>}
+            {(!newActivity.type || !newActivity.place) && <Button variant="contained" size="small" disabled onClick={onClickAddActivity}>Add</Button>}
         </div >
     );
 }

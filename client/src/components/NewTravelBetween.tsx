@@ -1,32 +1,40 @@
 import React from 'react'
 
-import { Select, MenuItem, SelectChangeEvent } from '@mui/material';
+import { SelectChangeEvent, Button } from '@mui/material';
 
-import { Leg } from './NewTrip';
+import { LegI } from './../utility/types';
 
 interface NewTravelBetweenProps {
-    legInfo: Leg,
-    updateLeg: (updatedLeg: Leg) => void,
+    legInfo: LegI,
+    updateLeg: (updatedLeg: LegI) => void,
 }
 
-export const NewTravelBetween: React.FC<NewTravelBetweenProps> = ({ updateLeg, legInfo }) => {
+const NewTravelBetween: React.FC<NewTravelBetweenProps> = ({ updateLeg, legInfo }) => {
 
     const onInputChange = (e: React.ChangeEvent<HTMLInputElement> | React.ChangeEvent<HTMLTextAreaElement> | SelectChangeEvent<string>) => {
         const travelAfter = { ...legInfo.travelAfter, [e.target.name]: e.target.value }
         updateLeg({ ...legInfo, travelAfter: travelAfter })
     }
 
+    const isSelectedVariant = (type: string) => {
+        if (type === legInfo.travelAfter.method) return "contained";
+        return "outlined";
+    }
+
+    const toggleType = (e: React.MouseEvent<HTMLButtonElement>): void => {
+        const travelAfter = { ...legInfo.travelAfter, method: e.currentTarget.name }
+        updateLeg({ ...legInfo, travelAfter: travelAfter })
+    }
+
     return (
         <div className="newTripTravelBetween">
             <h2>Travel Between</h2>
-            <div className="formRow">
-                <Select value={legInfo.travelAfter.method} name="method" size="small" onChange={onInputChange}>
-                    <MenuItem value="plane">✈ Plane</MenuItem>
-                    <MenuItem value="train">🚅 Train</MenuItem>
-                    <MenuItem value="car">🚗 Car</MenuItem>
-                    <MenuItem value="boat">🚢 Boat</MenuItem>
-                    <MenuItem value="other">🚀 Other</MenuItem>
-                </Select>
+            <div className="formRow travelBetweenBtnRow">
+                <Button variant={isSelectedVariant("plane")} size="small" name="plane" onClick={toggleType}>✈ Plane</Button>
+                <Button variant={isSelectedVariant("train")} size="small" name="train" onClick={toggleType}>🚅 Train</Button>
+                <Button variant={isSelectedVariant("car")} size="small" name="car" onClick={toggleType}>🚗 Car</Button>
+                <Button variant={isSelectedVariant("boat")} size="small" name="boat" onClick={toggleType}>🚢 Boat</Button>
+                <Button variant={isSelectedVariant("other")} size="small" name="other" onClick={toggleType}>🚀 Other</Button>
             </div>
             <div className="formRow">
                 <label>
@@ -37,3 +45,5 @@ export const NewTravelBetween: React.FC<NewTravelBetweenProps> = ({ updateLeg, l
         </div>
     );
 }
+
+export default NewTravelBetween;

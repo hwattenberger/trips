@@ -3,48 +3,62 @@ import { gql } from '@apollo/client'
 export const GET_TRIP_INFO = gql`
 query getTripInfo($idOfTrip: String!) {
   findTripById(_id: $idOfTrip) {
-      _id
-      startMonth
-      startDay
-      startYear
-      tripName
-      dayLength
-      description
-      user {
+    _id
+    startMonth
+    startDay
+    startYear
+    tripName
+    dayLength
+    user {
       username
-      }
-      legs {
+    }
+    description
+    legs {
       _id
       startDay
       endDay
       location {
-          country {
-          number
-          name
-          }
-          city
-          place
-          lat
-          long
+        countryShortCode
+        bbox
+        mapboxId
+        center
+        place_name
+      }
+      activity {
+        _id
+        type
+        place
+        rating
+        comments
+        day
       }
       comments
       rating
-      activity {
-          day
-          comments
-          rating
-          place
-          type
-          _id
+      travelAfter {
+        comments
+        method
       }
-      accommodations {
-          name
-          type
-      }
-      }
+    }
   }
 }
 `
+
+export const GET_TRIP_LOCATIONS = gql`
+query getLocationMapInfo($idOfTrip: String!) {
+  findTripById(_id: $idOfTrip) {
+    legs {
+      location {
+        countryShortCode
+        bbox
+        mapboxId
+        center
+        place_name
+      }
+    }
+  }
+}
+`
+
 export const GET_TRIPS = gql`
   query {
   allTrips {
@@ -59,4 +73,10 @@ export const GET_TRIPS = gql`
 }
 `
 
-
+export const CREATE_TRIP = gql`
+  mutation TripCreateMutation($input: TripInput) {
+  tripCreate(input: $input) {
+    _id
+  }
+}
+`

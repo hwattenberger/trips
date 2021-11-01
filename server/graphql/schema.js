@@ -28,6 +28,7 @@ const typeDefs = gql`
         activity: Activity
         comments: String
         rating: Int
+        travelAfter: TravelAfter
     }
 
     type Activity {
@@ -40,21 +41,21 @@ const typeDefs = gql`
     }
 
     type Location {
-        country: Country
-        city: String
-        place: String
-        lat: Float
-        long: Float
-    }
-
-    type Country {
-        number: Int
-        name: String
+        place_name: String
+        center: [Float]
+        mapboxId: String
+        bbox: [Float]
+        countryShortCode: String
     }
 
     type Accommodations {
         type: String
         name: String
+    }
+
+    type TravelAfter {
+        method: String
+        comments: String
     }
 
     input UserInput {
@@ -72,6 +73,7 @@ const typeDefs = gql`
         dayLength: Int
         userId: String
         description: String
+        legs: [LegInput]
     }
 
     input LegInput {
@@ -79,10 +81,16 @@ const typeDefs = gql`
         startDay: Int
         endDay: Int
         location: LocationInput
-        accommodations: AccommodationInput
-        activity: ActivityInput
+        # accommodations: AccommodationInput
+        activities: ActivityInput
         comments: String
         rating: Int
+        travelAfter: TravelAfterInput
+    }
+
+    input TravelAfterInput {
+        method: String
+        comments: String
     }
 
     input AccommodationInput {
@@ -91,16 +99,11 @@ const typeDefs = gql`
     }
 
     input LocationInput {
-        country: CountryInput
-        city: String
-        place: String
-        lat: Float
-        long: Float
-    }
-
-    input CountryInput {
-        number: Int
-        name: String
+        place_name: String
+        center: [Float]
+        mapboxId: String
+        bbox: [Float]
+        countryShortCode: String
     }
 
     input ActivityInput {

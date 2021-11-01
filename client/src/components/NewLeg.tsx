@@ -5,20 +5,15 @@ import { Input } from "./../styles/general"
 import { Search } from './Search';
 import { NewActivity } from './NewActivity';
 
-import { Activity, Leg, Location } from './NewTrip';
+import { LegI, ActivityI, LocationI } from './../utility/types';
 
 interface NewLegProps {
     startDt: Date | undefined,
     endDt: Date | undefined,
-    legInfo: Leg,
-    updateLeg: (updatedLeg: Leg) => void,
+    legInfo: LegI,
+    updateLeg: (updatedLeg: LegI) => void,
     ix: number
 }
-
-// const emptyLeg = {
-//     comments: "",
-//     rating: 0
-// }
 
 const NewLeg: React.FC<NewLegProps> = ({ startDt, endDt, updateLeg, ix, legInfo }) => {
 
@@ -41,13 +36,13 @@ const NewLeg: React.FC<NewLegProps> = ({ startDt, endDt, updateLeg, ix, legInfo 
         updateLeg({ ...legInfo, "legTo": val });
     }
 
-    const createActivity = (newActivity: Activity) => {
+    const createActivity = (newActivity: ActivityI) => {
         updateLeg({ ...legInfo, activities: [...legInfo.activities, newActivity] });
     }
 
     const setLocation = (newLocation: MapboxGeocoder.Result) => {
         let country_short_code = "";
-        const updatedLoc: Location = {
+        const updatedLoc: LocationI = {
             place_name: newLocation.place_name,
             center: [...newLocation.center],
             mapboxId: newLocation.id,
@@ -85,6 +80,7 @@ const NewLeg: React.FC<NewLegProps> = ({ startDt, endDt, updateLeg, ix, legInfo 
                 </div>
                 <div className="formRow">
                     Activities:
+                    {legInfo.activities.length === 0 && <div>- None (add activities below)</div>}
                     {legInfo.activities.map((activity, ix) => (
                         <div key={ix}>{activityIcon(activity.type)} - {activity.place}</div>
                     ))}
