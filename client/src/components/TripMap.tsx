@@ -6,31 +6,39 @@ import './TripMap.css'
 mapboxgl.accessToken = "pk.eyJ1IjoiaXdpc2hpaGFkIiwiYSI6ImNrdjJvejB4ZDBkb2cyb3A2bDY2YWY3eGoifQ.T-mys_-QQCK4CxmVnhiVxg";
 
 interface TripMapProps {
-    lat: number,
-    lng: number,
+    center: mapboxgl.LngLatLike,
     locations: TripMapLocation[]
 }
 
 interface TripMapLocation {
-    center: number[],
+    center: mapboxgl.LngLatLike,
     place_name: string
 }
 
-export const TripMap: React.FC<TripMapProps> = ({ lng, lat, locations }) => {
+export const TripMap: React.FC<TripMapProps> = ({ center, locations }) => {
     const mapContainer = useRef<null | HTMLDivElement>(null);
-    // const [map, setMap] = useState<null | mapboxgl.Map>();
-    const markers = useRef<null | mapboxgl.Marker[]>([]);
+    const [map, setMap] = useState<null | mapboxgl.Map>();
+    // const markers = useRef<null | mapboxgl.Marker[]>([]);
 
     // const [zoom, setZoom] = useState(5);
     // const [point, setPoint] = useState<null | latLng>(null);
+
+    useEffect(() => {
+        if (map) {
+            map.flyTo({
+                center: center,
+                zoom: 8
+            })
+        }
+    }, [center])
 
     useEffect(() => {
         // if (map) return; // initialize map only once
         const newMap = new mapboxgl.Map({
             container: mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v11',
-            center: [lng, lat],
-            zoom: 5
+            center: center,
+            zoom: 3
         });
 
         const featureList = locations.map((loc) => {
@@ -56,21 +64,21 @@ export const TripMap: React.FC<TripMapProps> = ({ lng, lat, locations }) => {
                 'id': 'legLocations',
                 'type': 'circle',
                 'source': 'legLocations',
-                // 'paint': {
-                //     'fill-color': '#888888',
-                //     'fill-opacity': 0.4
-                // },
+                'paint': {
+                    'circle-color': 'red',
+                    'circle-radius': 10
+                },
                 // 'filter': ['==', '$type', 'Point']
             })
 
-            // setMap(newMap);
+            setMap(newMap);
         })
 
         return () => newMap.remove();
     }, []);
 
     return (
-        <div className="mapSinglePoint">
+        <div className="mapMultiPoint">
             <div ref={mapContainer} className="map-container" />
         </div>
     );

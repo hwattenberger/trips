@@ -40,6 +40,10 @@
     /* margin: 10px; */
 }
 
+.establishedTripLegDiv {
+    /* min-height: 900px; */
+}
+
 .newTripTravelBetween {
     background-color: lightpink;
     border-radius: 5px;
@@ -57,7 +61,8 @@ h2 {
     margin-bottom: 6px;
 }
 
-.mapSinglePoint {
+.mapSinglePoint,
+.mapMultiPoint {
     width: 400px;
     height: 100%;
 }
@@ -88,5 +93,15 @@ h2 {
         position: absolute;
         top: -100px;
         left: 700px;
+    }
+}
+
+@media (min-width: 900px) {
+
+    .mapMultiPoint {
+        position: fixed;
+        top: 100px;
+        /* left: 1000px; */
+        /* z-index: 1; */
     }
 }
