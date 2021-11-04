@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router";
 import { useQuery } from '@apollo/client'
 import { GET_TRIP_INFO, GET_TRIP_LOCATIONS } from './../query/query'
-import { TripMap } from './TripMap';
+import { TripMap } from './maps/TripMap';
 import TravelBetween from './TravelBetween';
 import styled from 'styled-components';
 import { LegI } from '../utility/types';
@@ -29,7 +29,7 @@ const Trip: React.FC = ({ }) => {
     const monthArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
     useEffect(() => {
-        if (data && data.findTripById && data.findTripById.legs[0].location.center) setCenter(data.findTripById.legs[0].location.center);
+        if (data && data.findTripById && data.findTripById.legs[0] && data.findTripById.legs[0].location.center) setCenter(data.findTripById.legs[0].location.center);
     }, [data])
 
     const startDate = () => {

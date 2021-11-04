@@ -2,7 +2,7 @@ import React, { ChangeEvent, useEffect, useState, useMemo } from 'react'
 import axios from "axios";
 
 import { Input } from "./../styles/general";
-import { StaticPointOnMap } from './StaticPointOnMap';
+import StaticPointOnMap from './maps/StaticPointOnMap';
 import './Search.css';
 import debounce from 'lodash.debounce';
 import MapboxGeocoder from '@mapbox/mapbox-gl-geocoder';
@@ -39,6 +39,10 @@ export const Search: React.FC<SearchProps> = ({ setLocation, location }) => {
     useEffect(() => {
         return () => debounceSearch.cancel();
     }, [])
+
+    useEffect(() => {
+        if (!searchStr && location && location.place_name) setSearchStr(location.place_name);
+    }, [location])
 
     const search = (currentSearch: String) => {
         axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${currentSearch}.json`, axiosSettings)

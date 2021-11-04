@@ -83,6 +83,32 @@ export const NewTrip: React.FC = () => {
             dayLength = ((startDtDayJs.diff(to, 'day') * -1) + 1)
         }
 
+        const createLegs = legs.map((leg: LegI) => {
+            const updLocation = { ...leg.location };
+            if (leg.location && leg.location.country_short_code) updLocation.countryShortCode = leg.location.country_short_code;
+            delete updLocation.country_short_code;
+
+            let startDayDiff;
+            let endDayDiff;
+
+            if (leg.legFrom) {
+                startDayDiff = startDtDayJs.diff(leg.legFrom, 'day');
+                startDayDiff = startDayDiff * -1;
+            }
+            if (leg.legTo) {
+                endDayDiff = startDtDayJs.diff(leg.legTo, 'day');
+                endDayDiff = endDayDiff * -1;
+            }
+
+            return {
+                location: updLocation,
+                comments: leg.comments,
+                rating: leg.rating,
+                travelAfter: leg.travelAfter,
+                startDay: startDayDiff,
+                endDay: endDayDiff
+            }
+        })
 
         const createTripInput = {
             startMonth: startDtDayJs.month() + 1,
@@ -91,17 +117,7 @@ export const NewTrip: React.FC = () => {
             tripName: tripInfo.tripName,
             dayLength: dayLength,
             description: tripInfo.description,
-            legs: legs.map((leg: LegI) => {
-                const updLocation = { ...leg.location };
-                if (leg.location && leg.location.country_short_code) updLocation.countryShortCode = leg.location.country_short_code;
-                delete updLocation.country_short_code;
-                return {
-                    location: updLocation,
-                    comments: leg.comments,
-                    rating: leg.rating,
-                    travelAfter: leg.travelAfter
-                }
-            })
+            legs: createLegs
         }
         console.log("test", createTripInput)
         createTrip({ variables: { input: createTripInput } });

@@ -24,7 +24,6 @@ const typeDefs = gql`
         startDay: Int
         endDay: Int
         location: Location
-        accommodations: Accommodations
         activity: Activity
         comments: String
         rating: Int
@@ -48,11 +47,6 @@ const typeDefs = gql`
         countryShortCode: String
     }
 
-    type Accommodations {
-        type: String
-        name: String
-    }
-
     type TravelAfter {
         method: String
         comments: String
@@ -62,6 +56,11 @@ const typeDefs = gql`
         _id: ID
         username: String
         email: String
+    }
+
+    input LoginInput {
+        username: String
+        password: String
     }
 
     input TripInput {
@@ -81,7 +80,6 @@ const typeDefs = gql`
         startDay: Int
         endDay: Int
         location: LocationInput
-        # accommodations: AccommodationInput
         activities: ActivityInput
         comments: String
         rating: Int
@@ -91,11 +89,6 @@ const typeDefs = gql`
     input TravelAfterInput {
         method: String
         comments: String
-    }
-
-    input AccommodationInput {
-        type: String
-        name: String
     }
 
     input LocationInput {
@@ -127,6 +120,7 @@ const typeDefs = gql`
     type Mutation {
         userCreate(input: UserInput): User
         userUpdate(input: UserInput): User
+        login(input: LoginInput): User
         tripCreate(input: TripInput): Trip
         tripUpdate(input: TripInput): Trip
     }

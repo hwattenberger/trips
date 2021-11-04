@@ -1,11 +1,14 @@
-import React, { ChangeEvent, useEffect } from 'react'
+import React, { ChangeEvent, useEffect, useState } from 'react'
 
 import Calendar from "./Calendar"
 import { Input } from "./../styles/general"
 import { Search } from './Search';
 import { NewActivity } from './NewActivity';
+import TripMapOnClick from './maps/TripMapOnClick';
 
 import { LegI, ActivityI, LocationI } from './../utility/types';
+
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
 
 interface NewLegProps {
     startDt: Date | undefined,
@@ -16,13 +19,27 @@ interface NewLegProps {
 }
 
 const NewLeg: React.FC<NewLegProps> = ({ startDt, endDt, updateLeg, ix, legInfo }) => {
-
-    // const [location, setLocation] = useState("");
+    const [openSearch, setOpenSearch] = useState(false);
+    const [tempLocation, setTempLocation] = useState<MapboxGeocoder.Result | undefined | null>();
 
     useEffect(() => {
         setLegFrom(startDt);
     }, [startDt]);
 
+    const openDialog = () => {
+        setOpenSearch(true);
+    }
+
+    const handleClose = () => {
+        setOpenSearch(false);
+        setTempLocation(null);
+    }
+
+    const acceptAndClose = () => {
+        if (tempLocation) setLocation(tempLocation);
+        setOpenSearch(false);
+        setTempLocation(null);
+    }
 
     const onInputChange = (e: ChangeEvent<HTMLInputElement> | ChangeEvent<HTMLTextAreaElement>) => {
         updateLeg({ ...legInfo, [e.target.name]: e.target.value });
@@ -49,9 +66,15 @@ const NewLeg: React.FC<NewLegProps> = ({ startDt, endDt, updateLeg, ix, legInfo 
             bbox: [...newLocation.bbox]
         }
 
-        for (let i = 0; i < newLocation.context.length && !country_short_code; i++) {
-            if (newLocation.context[i].id.includes("country")) country_short_code = newLocation.context[i].short_code;
+        //Not a country
+        if (newLocation.context) {
+            for (let i = 0; i < newLocation.context.length && !country_short_code; i++) {
+                if (newLocation.context[i].id.includes("country")) country_short_code = newLocation.context[i].short_code;
+            }
         }
+        //A country already
+        else if (newLocation.properties) country_short_code = newLocation.properties.short_code
+
         if (country_short_code) updatedLoc.country_short_code = country_short_code;
 
         console.log("location", updatedLoc)
@@ -69,6 +92,7 @@ const NewLeg: React.FC<NewLegProps> = ({ startDt, endDt, updateLeg, ix, legInfo 
             <h2>Leg {ix + 1}</h2>
             <div className="tripForm">
                 <Search setLocation={setLocation} location={legInfo.location} />
+                Can't find the location?  <span className="clickToOpenClickMap" onClick={openDialog}>Find it on a map.</span>
                 <div className="formRow">
                     <Calendar from={legInfo.legFrom} to={legInfo.legTo} setFrom={setLegFrom} setTo={setLegTo} minDate={startDt} maxDate={endDt} />
                 </div>
@@ -87,6 +111,25 @@ const NewLeg: React.FC<NewLegProps> = ({ startDt, endDt, updateLeg, ix, legInfo 
                     <NewActivity createActivity={createActivity} />
                 </div>
             </div>
+            <Dialog
+                open={openSearch}
+                sx={{ '& .MuiDialog-paper': { width: '100%', maxHeight: '100%' } }}
+                onClose={handleClose}
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"Where did you travel?"}
+                </DialogTitle>
+                <DialogContent>
+                    <TripMapOnClick setTempLocation={setTempLocation} />
+                    {tempLocation && tempLocation.place_name}
+                </DialogContent>
+                <DialogActions>
+                    {tempLocation && <Button onClick={acceptAndClose}>Accept</Button>}
+                    <Button onClick={handleClose}>Cancel</Button>
+                </DialogActions>
+            </Dialog>
         </div>
     );
 }

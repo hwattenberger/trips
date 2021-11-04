@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useRef, useEffect } from 'react'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
 import './TripMap.css'
@@ -10,19 +10,15 @@ interface TripMapProps {
     lng: number
 }
 
-interface latLng {
-    lat: number,
-    lng: number
-}
+// interface latLng {
+//     lat: number,
+//     lng: number
+// }
 
-export const TripMap: React.FC<TripMapProps> = ({ lng, lat }) => {
+const StaticPointOnMap: React.FC<TripMapProps> = ({ lng, lat }) => {
     const mapContainer = useRef<null | HTMLDivElement>(null);
     const map = useRef<null | mapboxgl.Map>(null);
     const marker = useRef<null | mapboxgl.Marker>();
-    // const [lng, setLng] = useState(-70.9);
-    // const [lat, setLat] = useState(42.35);
-    const [zoom, setZoom] = useState(5);
-    const [point, setPoint] = useState<null | latLng>(null);
 
     useEffect(() => {
         if (map.current) return; // initialize map only once
@@ -30,27 +26,20 @@ export const TripMap: React.FC<TripMapProps> = ({ lng, lat }) => {
             container: mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v11',
             center: [lng, lat],
-            zoom: zoom
+            zoom: 5
         });
 
         console.log("getting here?", lng, lat)
         marker.current = new mapboxgl.Marker({
             color: '#00000',
-            // draggable: true
         }).setLngLat([lng, lat])
             .addTo(map.current)
-
-        // map.current.on('click', (e) => {
-        //     console.log(e.lngLat)
-        //     setPoint(e.lngLat);
-        //     tempMark.setLngLat([e.lngLat.lng, e.lngLat.lat])
-        // })
 
     }, []);
 
     useEffect(() => {
         if (map.current) {
-            console.log("getting here also?", lng, lat)
+            // console.log("getting here also?", lng, lat)
             map.current.flyTo({
                 center: [lng, lat]
             })
@@ -67,3 +56,5 @@ export const TripMap: React.FC<TripMapProps> = ({ lng, lat }) => {
         </div>
     );
 }
+
+export default StaticPointOnMap;

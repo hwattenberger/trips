@@ -21,6 +21,7 @@ const resolvers = {
         //users
         userCreate: users.createUser,
         userUpdate: users.updateUser,
+        login: users.login,
 
         //trips
         tripCreate: trips.createTrip,

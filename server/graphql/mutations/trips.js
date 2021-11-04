@@ -23,6 +23,22 @@ module.exports.createTrip = async (root, args) => {
     const newLegs = [];
     for (let i = 0; i < args.input.legs.length; i++) {
         const newLeg = new Leg(args.input.legs[i]);
+        // await newLeg.save();
+        newLegs.push(newLeg);
+    }
+    const newTrip = new Trip(args.input);
+    newTrip.legs = newLegs;
+
+    if (args.input.userId) newTrip.user = args.input.userId;
+    // await newTrip.save();
+    console.log("New Trip", newTrip)
+    return newTrip;
+}
+
+module.exports.createTripOld = async (root, args) => {
+    const newLegs = [];
+    for (let i = 0; i < args.input.legs.length; i++) {
+        const newLeg = new Leg(args.input.legs[i]);
         await newLeg.save();
         newLegs.push(newLeg);
     }

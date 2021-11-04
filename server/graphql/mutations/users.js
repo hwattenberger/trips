@@ -23,3 +23,9 @@ module.exports.createUser = async (root, args) => {
     await newUser.save();
     return newUser;
 }
+
+module.exports.login = async (root, args) => {
+    const newUser = new User(args.input);
+    await newUser.save();
+    return newUser;
+}
