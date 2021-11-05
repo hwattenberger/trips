@@ -119,7 +119,7 @@ const NewLeg: React.FC<NewLegProps> = ({ startDt, endDt, updateLeg, ix, legInfo 
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"Where did you travel?"}
+                    {"Where did you travel? (Left click on the spot)"}
                 </DialogTitle>
                 <DialogContent>
                     <TripMapOnClick setTempLocation={setTempLocation} />

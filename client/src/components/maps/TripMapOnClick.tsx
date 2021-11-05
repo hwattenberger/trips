@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react'
+import React, { useRef, useEffect } from 'react'
 import axios from "axios";
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
@@ -7,13 +7,13 @@ import './TripMap.css'
 mapboxgl.accessToken = "pk.eyJ1IjoiaXdpc2hpaGFkIiwiYSI6ImNrdjJvejB4ZDBkb2cyb3A2bDY2YWY3eGoifQ.T-mys_-QQCK4CxmVnhiVxg";
 
 interface TripMapProps {
-    setTempLocation: () => MapboxGeocoder.Result;
+    setTempLocation: (tempLoc: MapboxGeocoder.Result | null) => null;
 }
 
-interface latLng {
-    lat: number,
-    lng: number
-}
+// interface latLng {
+//     lat: number,
+//     lng: number
+// }
 
 const axiosSettings = {
     params: {

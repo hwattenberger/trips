@@ -7,7 +7,7 @@ const resolvers = {
     Query: {
         test: () => "Hi",
         allUsers: async () => await User.find({}),
-        findUserByEmail: async (root, args) => await User.findOne({email: args.email}),
+        findUserByName: async (root, args) => await User.findOne({username: args.username}),
         allTrips: async () => await Trip.find({}).populate({path:'user'}),
         findTripsByUser: async (root, args) => await Trip.findOne({user: args.userId}),
         findTripById: async (root, args) => await Trip.findById(args._id).populate({path:'legs'}),

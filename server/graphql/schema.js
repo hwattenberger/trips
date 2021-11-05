@@ -4,7 +4,7 @@ const typeDefs = gql`
     type User {
         _id: ID
         username: String
-        email: String
+        password: String
     }
 
     type Trip {
@@ -52,10 +52,14 @@ const typeDefs = gql`
         comments: String
     }
 
+    type Token {
+        value: String!
+    }
+
     input UserInput {
         _id: ID
         username: String
-        email: String
+        password: String
     }
 
     input LoginInput {
@@ -80,7 +84,7 @@ const typeDefs = gql`
         startDay: Int
         endDay: Int
         location: LocationInput
-        activities: ActivityInput
+        activities: [ActivityInput]
         comments: String
         rating: Int
         travelAfter: TravelAfterInput
@@ -111,7 +115,7 @@ const typeDefs = gql`
     type Query {
         test: String
         allUsers: [User!]!
-        findUserByEmail(email: String!): User
+        findUserByName(username: String!): User
         allTrips: [Trip!]!
         findTripsByUser(userId: String!): [Trip!]!
         findTripById(_id: String!): Trip!
@@ -120,7 +124,7 @@ const typeDefs = gql`
     type Mutation {
         userCreate(input: UserInput): User
         userUpdate(input: UserInput): User
-        login(input: LoginInput): User
+        login(input: LoginInput): Token
         tripCreate(input: TripInput): Trip
         tripUpdate(input: TripInput): Trip
     }

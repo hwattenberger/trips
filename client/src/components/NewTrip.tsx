@@ -85,6 +85,7 @@ export const NewTrip: React.FC = () => {
 
         const createLegs = legs.map((leg: LegI) => {
             const updLocation = { ...leg.location };
+            console.log("leg", leg)
             if (leg.location && leg.location.country_short_code) updLocation.countryShortCode = leg.location.country_short_code;
             delete updLocation.country_short_code;
 
@@ -106,7 +107,8 @@ export const NewTrip: React.FC = () => {
                 rating: leg.rating,
                 travelAfter: leg.travelAfter,
                 startDay: startDayDiff,
-                endDay: endDayDiff
+                endDay: endDayDiff,
+                activities: leg.activities
             }
         })
 

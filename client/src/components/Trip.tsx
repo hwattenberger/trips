@@ -24,7 +24,7 @@ const Trip: React.FC = ({ }) => {
     const { tripId } = useParams();
     const { loading, error, data } = useQuery(GET_TRIP_INFO, { variables: { idOfTrip: tripId } });
     const locationQuery = useQuery(GET_TRIP_LOCATIONS, { variables: { idOfTrip: tripId } });
-    const [center, setCenter] = useState();
+    const [center, setCenter] = useState<[number, number]>();
 
     const monthArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
@@ -75,31 +75,6 @@ const Trip: React.FC = ({ }) => {
             {/* // </Box> */}
         </Container>
     );
-
-    // if (loading || locationQuery.loading) return <>Loading</>
-    // return (
-    //     <Container maxWidth="md">
-    //         <Header>{data.findTripById.tripName}{data.findTripById.dayLength && ` - ${data.findTripById.dayLength} days`}</Header>
-    //         <Subtitle>{startDate()}, {data.findTripById.startYear}</Subtitle>
-    //         <TripMap lng={data.findTripById.legs[0].location.center[0]} lat={data.findTripById.legs[0].location.center[1]} locations={locationQuery.data.findTripById.legs} />
-    //         {data.findTripById.description && <p>{data.findTripById.description}</p>}
-    //         {data.findTripById.legs.map((leg: LegI, ix: number) => (
-    //             <InView as="div" key={leg._id} onChange={(inView, entry) => console.log('Inview:', inView)}>
-    //                 <div className="newTripLegDiv establishedTripLegDiv">
-    //                     <h2>Leg {ix + 1} {leg.location && <>- {leg.location.place_name}</>}</h2>
-    //                     <div>
-    //                         {/* {leg.location && <h3>Location - {leg.location.place_name}</h3>} */}
-    //                     </div>
-    //                     <div>
-    //                         {leg.comments && <> {leg.comments}</>}
-    //                     </div>
-    //                 </div>
-    //                 <TravelBetween leg={leg} />
-    //             </InView>
-    //         ))}
-    //         {/* {JSON.stringify(data.findTripById)} */}
-    //     </Container>
-    // );
 }
 
 export default Trip;

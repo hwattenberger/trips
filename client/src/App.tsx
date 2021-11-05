@@ -3,6 +3,8 @@ import { BrowserRouter, Switch, Route } from "react-router-dom";
 import AllTrips from './components/AllTrips';
 import Trip from './components/Trip';
 import { NewTrip } from './components/NewTrip';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
 
 import './App.css';
 
@@ -21,6 +23,12 @@ function App() {
           </Route>
           <Route path="/trips">
             <AllTrips />
+          </Route>
+          <Route path="/login">
+            <Login />
+          </Route>
+          <Route path="/register">
+            <Register />
           </Route>
         </Switch>
       </div>

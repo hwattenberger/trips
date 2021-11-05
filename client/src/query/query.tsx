@@ -80,3 +80,19 @@ export const CREATE_TRIP = gql`
   }
 }
 `
+
+export const LOGIN = gql`
+  mutation Mutation($input: LoginInput) {
+  login(input: $input) {
+    value
+  }
+}
+`
+
+export const CREATE_USER = gql`
+  mutation Mutation($input: UserInput) {
+    userCreate(input: $input) {
+    username
+  }
+}
+`

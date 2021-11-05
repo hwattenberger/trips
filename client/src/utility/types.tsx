@@ -19,7 +19,7 @@ export interface LegI {
 
 export interface LocationI {
     place_name: string,
-    center: number[],
+    center: [number, number],
     mapboxId: string | number | undefined,
     bbox: number[],
     country_short_code?: string

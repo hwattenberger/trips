@@ -1,5 +1,6 @@
 const Trip = require('../../models/trip');
 const Leg = require('../../models/leg');
+const Activity = require('../../models/activity')
 const { UserInputError } = require('apollo-server-express');
 
 
@@ -22,7 +23,16 @@ module.exports.updateTrip = async (root, args) => {
 module.exports.createTrip = async (root, args) => {
     const newLegs = [];
     for (let i = 0; i < args.input.legs.length; i++) {
+        const activities = [];
+
+        for(let j=0; j<args.input.legs[i].activities.length; j++) {
+            const newActivity = new Activity(args.input.legs[i].activities[j]);
+            // await newActivity.save();
+            activities.push(newActivity);
+        }
+
         const newLeg = new Leg(args.input.legs[i]);
+        newLeg.activities = activities;
         // await newLeg.save();
         newLegs.push(newLeg);
     }
