@@ -3,7 +3,11 @@ import { Button, Container, TextField } from '@mui/material';
 import { LOGIN } from './../../query/query'
 import { useMutation } from '@apollo/client';
 
-const Login: React.FC = () => {
+interface LoginProps {
+    setToken: (token: React.Dispatch<React.SetStateAction<string>>) => void
+}
+
+const Login: React.FC<LoginProps> = ({ setToken }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [err, setErr] = useState("");
@@ -16,12 +20,14 @@ const Login: React.FC = () => {
     });
 
     useEffect(() => {
-        if (result.data) {
-            console.log("Logged in!");
+        if (result.data && result.data.login.value) {
+            const token = result.data.login.value;
+            setToken(token);
+            localStorage.setItem('login-user-token', token);
         }
-    }, [result.data])
+    }, [result.data]) // eslint-disable-line
 
-    const handleSubmit = (e) => {
+    const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         setErr("");
 

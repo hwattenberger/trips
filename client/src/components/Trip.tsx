@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from "react-router";
-import { useQuery } from '@apollo/client'
+import { useQuery } from '@apollo/client';
 import { GET_TRIP_INFO, GET_TRIP_LOCATIONS } from './../query/query'
 import { TripMap } from './maps/TripMap';
 import TravelBetween from './TravelBetween';

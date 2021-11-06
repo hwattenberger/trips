@@ -117,6 +117,7 @@ const typeDefs = gql`
         allUsers: [User!]!
         findUserByName(username: String!): User
         allTrips: [Trip!]!
+        findMyTrips: [Trip!]!
         findTripsByUser(userId: String!): [Trip!]!
         findTripById(_id: String!): Trip!
     }

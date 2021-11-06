@@ -32,7 +32,8 @@ module.exports.createUser = async (root, args) => {
     return newUser;
 }
 
-module.exports.login = async (root, args) => {
+module.exports.login = async (root, args, context) => {
+    console.log("TEST", context.currentUser);
     const user = await User.findOne({username: args.input.username})
 
     if (!user) {
@@ -47,7 +48,7 @@ module.exports.login = async (root, args) => {
     // if (user.password !== hashedPassword) throw new UserInputError('Invalid credentials');
     // const newUser = new User(args.input);
     console.log("Logging In", args.input, user)
-    return { value: jwt.sign({id: user._id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "15min"}) };
+    return { value: jwt.sign({id: user._id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "1d"}) };
     // const refreshToken = jwt.sign({id: _id, username: username}, process.env.JWT_SECRET, {expiresIn: "7d"});
     // await newUser.save();
     // return newUser;

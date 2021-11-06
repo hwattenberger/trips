@@ -67,8 +67,19 @@ export const GET_TRIPS = gql`
     user {
       username
       _id
-      email
     }
+  }
+}
+`
+
+export const GET_MY_TRIPS = gql`
+  query {
+    findMyTrips {
+      tripName
+      startMonth
+      startDay
+      startYear
+      description
   }
 }
 `
