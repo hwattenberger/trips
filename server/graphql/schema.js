@@ -24,7 +24,7 @@ const typeDefs = gql`
         startDay: Int
         endDay: Int
         location: Location
-        activity: Activity
+        activities: [Activity]
         comments: String
         rating: Int
         travelAfter: TravelAfter
@@ -55,6 +55,11 @@ const typeDefs = gql`
     type Token {
         value: String!
     }
+
+    type CheckToken {
+        hasToken: Boolean
+    }
+
 
     input UserInput {
         _id: ID
@@ -116,6 +121,7 @@ const typeDefs = gql`
         test: String
         allUsers: [User!]!
         findUserByName(username: String!): User
+        checkToken: CheckToken
         allTrips: [Trip!]!
         findMyTrips: [Trip!]!
         findTripsByUser(userId: String!): [Trip!]!

@@ -24,7 +24,7 @@ query getTripInfo($idOfTrip: String!) {
         center
         place_name
       }
-      activity {
+      activities {
         _id
         type
         place
@@ -72,14 +72,31 @@ export const GET_TRIPS = gql`
 }
 `
 
+export const CHECK_TOKEN = gql`
+  query {
+  checkToken {
+    hasToken
+  }
+}
+`
+
 export const GET_MY_TRIPS = gql`
   query {
     findMyTrips {
+      _id
       tripName
       startMonth
       startDay
       startYear
       description
+  }
+}
+`
+
+export const EDIT_TRIP = gql`
+  mutation TripUpdateMutation($input: TripInput) {
+  tripUpdate(input: $input) {
+    _id
   }
 }
 `

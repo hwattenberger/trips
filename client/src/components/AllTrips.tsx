@@ -11,11 +11,13 @@ interface trip {
 const AllTrips: React.FC = () => {
     const result = useQuery(GET_TRIPS);
 
-    if (result.loading) return <>"Loading"</>;
+    if (result.loading) return <>Loading</>;
+
+    if (result.error) return <>Error</>;
 
     return (
         <div>
-            All Trips
+            <h1>All Trips</h1>
             {result.data.allTrips.map((trip: trip) => (
                 <div key={trip._id}>
                     {trip.tripName} -

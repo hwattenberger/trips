@@ -24,6 +24,7 @@ const Login: React.FC<LoginProps> = ({ setToken }) => {
             const token = result.data.login.value;
             setToken(token);
             localStorage.setItem('login-user-token', token);
+            window.location.href = "/";
         }
     }, [result.data]) // eslint-disable-line
 

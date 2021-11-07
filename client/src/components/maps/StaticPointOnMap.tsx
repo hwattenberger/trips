@@ -29,7 +29,6 @@ const StaticPointOnMap: React.FC<TripMapProps> = ({ lng, lat }) => {
             zoom: 5
         });
 
-        console.log("getting here?", lng, lat)
         marker.current = new mapboxgl.Marker({
             color: '#00000',
         }).setLngLat([lng, lat])
@@ -39,7 +38,6 @@ const StaticPointOnMap: React.FC<TripMapProps> = ({ lng, lat }) => {
 
     useEffect(() => {
         if (map.current) {
-            // console.log("getting here also?", lng, lat)
             map.current.flyTo({
                 center: [lng, lat]
             })

@@ -32,8 +32,10 @@ module.exports.createUser = async (root, args) => {
     return newUser;
 }
 
+module.exports.checkToken = async (root, args, context) => {
+}
+
 module.exports.login = async (root, args, context) => {
-    console.log("TEST", context.currentUser);
     const user = await User.findOne({username: args.input.username})
 
     if (!user) {

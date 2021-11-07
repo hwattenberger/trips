@@ -1,17 +1,18 @@
-import React, { ChangeEvent, useState } from 'react'
-import { useMutation } from '@apollo/client';
+import React, { ChangeEvent, useState, useEffect } from 'react'
+import { useMutation, useQuery } from '@apollo/client';
 import dayjs from 'dayjs';
+import { useParams } from "react-router";
 
-import { CREATE_TRIP } from './../query/query'
+import { EDIT_TRIP, GET_TRIP_INFO } from './../../query/query';
 
-import { Input } from "./../styles/general"
+import { Input } from "./../../styles/general"
 import { Button, Snackbar } from '@mui/material';
 
-import Calendar from './Calendar';
-import NewLeg from './NewLeg';
-import NewTravelBetween from './NewTravelBetween';
+import Calendar from './../Calendar';
+import NewLeg from './../NewLeg';
+import NewTravelBetween from './../NewTravelBetween';
 
-import { LegI, TripI } from './../utility/types'
+import { LegI, TripI } from './../../utility/types';
 
 
 
@@ -35,7 +36,7 @@ const emptyLeg: LegI = {
     }
 }
 
-export const NewTrip: React.FC = () => {
+export const EditTrip: React.FC = () => {
     const [tripInfo, setTripInfo] = useState<TripI>(emptyTrip);
     const [from, setFrom] = useState<Date | undefined>();
     const [to, setTo] = useState<Date | undefined>();
@@ -43,12 +44,64 @@ export const NewTrip: React.FC = () => {
     const [err, setErr] = useState("");
     const [open, setOpen] = useState(false);
 
-    const [createTrip] = useMutation(CREATE_TRIP, {
+    const { tripId } = useParams();
+    const locationQuery = useQuery(GET_TRIP_INFO, { variables: { idOfTrip: tripId } });
+
+    const [updateTrip] = useMutation(EDIT_TRIP, {
         onError: (error) => {
             if (error.graphQLErrors[0]) setErr(error.graphQLErrors[0].message)
-            else setErr("Saving message was not successful");
+            else setErr("Updating trip was not successful");
         }
     });
+
+    useEffect(() => {
+        if (locationQuery.data) {
+            console.log("Trip", locationQuery.data.findTripById)
+
+            const startDate = new Date(locationQuery.data.findTripById.startYear, locationQuery.data.findTripById.startMonth, locationQuery.data.findTripById.startDay);
+            setFrom(startDate);
+            if (locationQuery.data.findTripById.dayLength) {
+                const endDate = dayjs(startDate).add(locationQuery.data.findTripById.dayLength - 1, 'day');
+                setTo(endDate.toDate());
+            }
+
+            const savedLegs: LegI[] = [];
+            locationQuery.data.findTripById.legs.forEach((leg) => {
+                const legStartDay = dayjs(startDate).add(leg.startDay, 'day').toDate();
+                let legEndDay;
+                if (leg.endDay) legEndDay = dayjs(startDate).add(leg.endDay, 'day').toDate();
+
+                const savedLeg: LegI = {
+                    _id: leg._id,
+                    comments: leg.comments,
+                    rating: leg.rating,
+                    legFrom: legStartDay,
+                    legTo: legEndDay,
+                    travelAfter: { method: leg.travelAfter.method, comments: leg.travelAfter.comments },
+                    location: { ...leg.location },
+                    activities: [...leg.activities]
+                }
+
+                // savedLeg.activities.forEach((leg) => {
+                //     delete leg.__typename
+                // })
+
+                // delete savedLeg.location.__typename;
+
+                savedLegs.push(savedLeg);
+            })
+            setLegs(savedLegs);
+
+            const savedTrip: TripI = {
+                _id: locationQuery.data.findTripById._id,
+                tripName: locationQuery.data.findTripById.tripName,
+                description: locationQuery.data.findTripById.description,
+                dayLength: locationQuery.data.findTripById.dayLength,
+                legs: []
+            }
+            setTripInfo(savedTrip);
+        }
+    }, [locationQuery]);
 
     const handleSnackClose = () => {
         setOpen(false);
@@ -78,7 +131,7 @@ export const NewTrip: React.FC = () => {
         return legs[ix - 1].legTo;
     }
 
-    const onClickCreateTrip = (e: React.SyntheticEvent) => {
+    const onClickUpdateTrip = (e: React.SyntheticEvent) => {
         e.preventDefault();
 
         const startDtDayJs = dayjs(from);
@@ -107,6 +160,7 @@ export const NewTrip: React.FC = () => {
             }
 
             return {
+                _id: leg._id,
                 location: updLocation,
                 comments: leg.comments,
                 rating: leg.rating,
@@ -118,6 +172,7 @@ export const NewTrip: React.FC = () => {
         })
 
         const createTripInput = {
+            _id: tripInfo._id,
             startMonth: startDtDayJs.month() + 1,
             startDay: startDtDayJs.date(),
             startYear: startDtDayJs.year(),
@@ -127,15 +182,17 @@ export const NewTrip: React.FC = () => {
             legs: createLegs
         }
         console.log("test", createTripInput)
-        createTrip({ variables: { input: createTripInput } });
-        setErr("");
+        updateTrip({ variables: { input: createTripInput } });
         setOpen(true);
+        setErr("");
     }
+
+    if (locationQuery.loading) return <>Loading...</>
 
     return (
         <div>
             {err && <div>Error: {err}</div>}
-            <h1>Create Trip</h1>
+            <h1>Edit Trip</h1>
             <div className="tripForm">
                 <div className="formRow">
                     <label>Trip Name:
@@ -159,14 +216,16 @@ export const NewTrip: React.FC = () => {
                         {ix !== legs.length - 1 && <NewTravelBetween updateLeg={(newLeg) => updateLeg(ix, newLeg)} legInfo={legs[ix]} />}
                     </div>
                 ))}
-                {legs.length !== 0 && <Button variant="contained" size="small" onClick={onClickCreateTrip}>Save Trip</Button>}
+                {legs.length !== 0 && <Button variant="contained" size="small" onClick={onClickUpdateTrip}>Update Trip</Button>}
             </div>
             <Snackbar
                 open={open}
                 autoHideDuration={6000}
                 onClose={handleSnackClose}
-                message="Trip saved"
+                message="Trip updated"
             />
         </div>
     );
 }
+
+export default EditTrip;

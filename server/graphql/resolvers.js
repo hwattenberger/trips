@@ -8,21 +8,27 @@ const resolvers = {
         test: () => "Hi",
         allUsers: async () => await User.find({}),
         findUserByName: async (root, args) => await User.findOne({username: args.username}),
+        checkToken: async (root, args, context) => {
+            if (context.currentUser && context.currentUser._id) return true;
+            return false;
+        },
         allTrips: async () => await Trip.find({}).populate({path:'user'}),
         findMyTrips: async (root, args, context) => {
             return Trip.find({user: context.currentUser._id})
         },
         findTripsByUser: async (root, args) => {
-            console.log("Hi")
             await Trip.find({user: args.userId})
         },
-        findTripById: async (root, args) => await Trip.findById(args._id).populate({path:'legs'}),
+        findTripById: async (root, args) => {
+            const trip = await Trip.findById(args._id).populate({
+                path: 'legs',
+                populate: {
+                    path: 'activities'
+                }
+            })
+            return trip;
+        },
     },
-    // Trip: {
-    //     legs: (root) => {
-    //         console.log("Hi2", root)
-    //     }
-    // },
     Mutation: {
         //users
         userCreate: users.createUser,
