@@ -1,6 +1,17 @@
-/* .App {
-    margin-left: 10px;
-} */
+/* Dark Blue - #3d5a80
+Light Blue - #98c1d9
+Lightest Blue - #e0fbfc
+Red - #ee6c4d
+Very Dark Blue - #293241 */
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+h3 {
+    margin-top: 0px;
+}
 
 .tripForm {
     max-width: 40rem;
@@ -27,12 +38,8 @@
     margin: 2px;
 }
 
-/* .tripForm .formRow {
-    max-width: 580px;
-} */
-
 .newTripLegDiv {
-    background-color: #C9D7F1;
+    background-color: #98c1d9;
     border-radius: 5px;
     padding: 10px;
     position: relative;
@@ -45,7 +52,7 @@
 }
 
 .newTripTravelBetween {
-    background-color: lightpink;
+    background-color: #ffa69e;
     border-radius: 5px;
     padding: 10px;
     margin: 10px 0px;
@@ -68,7 +75,6 @@ h2 {
 }
 
 .newActivity {
-    /* border: 2px solid black; */
     padding: 4px;
     background-color: rgb(255, 255, 255, .25);
     margin-top: 6px;
@@ -89,8 +95,51 @@ h2 {
 }
 
 .clickToOpenClickMap {
-    color: blue;
+    color: #3d5a80;
     cursor: pointer;
+}
+
+.landingStarterDiv .landingStarterDivText {
+    margin-bottom: 50px;
+}
+
+.landingSearch {
+    text-align: center;
+    margin-top: -80px;
+    margin-bottom: 80px;
+}
+
+.landingSearch2 {
+    text-align: center;
+    background-color: white;
+    margin-top: -40px;
+    width: 50%;
+    box-shadow: 0px 4px 25px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(32px);
+    border-radius: 32px;
+}
+
+.featuredTripsDiv {
+    display: flex;
+    flex-direction: row;
+}
+
+.loginRegisterDiv {
+    max-width: 330px;
+}
+
+.loginRegisterDiv div {
+    margin-bottom: 6px;
+}
+
+.loginRegisterDiv button {
+    margin-top: 6px;
+}
+
+.error {
+    background-color: lightpink;
+    width: 100%;
+    padding: 6px;
 }
 
 @media (min-width: 1100px) {

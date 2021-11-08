@@ -12,7 +12,8 @@ const TripSchema = new Schema({
         type: Schema.Types.ObjectId,
         ref: 'User'
     },
-    legs: [{ type: Schema.Types.ObjectId, ref: 'Leg'}]
+    legs: [{ type: Schema.Types.ObjectId, ref: 'Leg'}],
+    isFeatured: Boolean
 })
 
 module.exports = mongoose.model('Trip', TripSchema);

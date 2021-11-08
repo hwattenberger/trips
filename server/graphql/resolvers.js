@@ -28,6 +28,9 @@ const resolvers = {
             })
             return trip;
         },
+        findFeaturedTrips: async (root, args) => {
+            return Trip.find({isFeatured: true}).limit(5);
+        },
     },
     Mutation: {
         //users

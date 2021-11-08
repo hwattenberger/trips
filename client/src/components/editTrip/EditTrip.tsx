@@ -15,6 +15,14 @@ import NewTravelBetween from './../NewTravelBetween';
 import { LegI, TripI } from './../../utility/types';
 
 
+export interface LocationSaveServerI {
+    place_name?: string,
+    center?: [number, number],
+    mapboxId?: string | number | undefined,
+    bbox?: number[],
+    country_short_code?: string,
+    countryShortCode?: string
+}
 
 const emptyTrip: TripI = {
     tripName: "",
@@ -44,7 +52,7 @@ export const EditTrip: React.FC = () => {
     const [err, setErr] = useState("");
     const [open, setOpen] = useState(false);
 
-    const { tripId } = useParams();
+    const { tripId } = useParams<{ tripId?: string }>();
     const locationQuery = useQuery(GET_TRIP_INFO, { variables: { idOfTrip: tripId } });
 
     const [updateTrip] = useMutation(EDIT_TRIP, {
@@ -58,7 +66,7 @@ export const EditTrip: React.FC = () => {
         if (locationQuery.data) {
             console.log("Trip", locationQuery.data.findTripById)
 
-            const startDate = new Date(locationQuery.data.findTripById.startYear, locationQuery.data.findTripById.startMonth, locationQuery.data.findTripById.startDay);
+            const startDate = new Date(locationQuery.data.findTripById.startYear, locationQuery.data.findTripById.startMonth - 1, locationQuery.data.findTripById.startDay);
             setFrom(startDate);
             if (locationQuery.data.findTripById.dayLength) {
                 const endDate = dayjs(startDate).add(locationQuery.data.findTripById.dayLength - 1, 'day');
@@ -81,12 +89,6 @@ export const EditTrip: React.FC = () => {
                     location: { ...leg.location },
                     activities: [...leg.activities]
                 }
-
-                // savedLeg.activities.forEach((leg) => {
-                //     delete leg.__typename
-                // })
-
-                // delete savedLeg.location.__typename;
 
                 savedLegs.push(savedLeg);
             })
@@ -142,7 +144,7 @@ export const EditTrip: React.FC = () => {
         }
 
         const createLegs = legs.map((leg: LegI) => {
-            const updLocation = { ...leg.location };
+            const updLocation: LocationSaveServerI = { ...leg.location };
             console.log("leg", leg)
             if (leg.location && leg.location.country_short_code) updLocation.countryShortCode = leg.location.country_short_code;
             delete updLocation.country_short_code;

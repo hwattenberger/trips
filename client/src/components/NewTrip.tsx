@@ -13,7 +13,14 @@ import NewTravelBetween from './NewTravelBetween';
 
 import { LegI, TripI } from './../utility/types'
 
-
+export interface LocationSaveServerI {
+    place_name?: string,
+    center?: [number, number],
+    mapboxId?: string | number | undefined,
+    bbox?: number[],
+    country_short_code?: string,
+    countryShortCode?: string
+}
 
 const emptyTrip: TripI = {
     tripName: "",
@@ -78,6 +85,10 @@ export const NewTrip: React.FC = () => {
         return legs[ix - 1].legTo;
     }
 
+    const validateDates = () => {
+
+    }
+
     const onClickCreateTrip = (e: React.SyntheticEvent) => {
         e.preventDefault();
 
@@ -89,7 +100,7 @@ export const NewTrip: React.FC = () => {
         }
 
         const createLegs = legs.map((leg: LegI) => {
-            const updLocation = { ...leg.location };
+            const updLocation: LocationSaveServerI = { ...leg.location };
             console.log("leg", leg)
             if (leg.location && leg.location.country_short_code) updLocation.countryShortCode = leg.location.country_short_code;
             delete updLocation.country_short_code;

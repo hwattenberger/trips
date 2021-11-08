@@ -21,7 +21,7 @@ const Subtitle = styled.p`
 `;
 
 const Trip: React.FC = ({ }) => {
-    const { tripId } = useParams();
+    const { tripId } = useParams<{ tripId?: string }>();
     const { loading, error, data } = useQuery(GET_TRIP_INFO, { variables: { idOfTrip: tripId } });
     const locationQuery = useQuery(GET_TRIP_LOCATIONS, { variables: { idOfTrip: tripId } });
     const [center, setCenter] = useState<[number, number]>();

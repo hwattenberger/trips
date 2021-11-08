@@ -64,6 +64,7 @@ export const GET_TRIPS = gql`
   allTrips {
     _id
     tripName
+    dayLength
     user {
       username
       _id
@@ -89,6 +90,16 @@ export const GET_MY_TRIPS = gql`
       startDay
       startYear
       description
+  }
+}
+`
+
+export const GET_FEATURED_TRIPS = gql`
+  query {
+  findFeaturedTrips {
+    _id
+    tripName
+    dayLength
   }
 }
 `

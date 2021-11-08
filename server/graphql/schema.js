@@ -126,6 +126,7 @@ const typeDefs = gql`
         findMyTrips: [Trip!]!
         findTripsByUser(userId: String!): [Trip!]!
         findTripById(_id: String!): Trip!
+        findFeaturedTrips: [Trip!]!
     }
 
     type Mutation {

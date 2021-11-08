@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { Button, Container, TextField } from '@mui/material';
-import { LOGIN } from './../../query/query'
+import { LOGIN } from './../../query/query';
 import { useMutation } from '@apollo/client';
+import { Input } from "./../../styles/general";
 
 interface LoginProps {
     setToken: (token: React.Dispatch<React.SetStateAction<string>>) => void
@@ -40,14 +41,18 @@ const Login: React.FC<LoginProps> = ({ setToken }) => {
     return (
         <Container>
             <h1>Login</h1>
-            <div>
-                <div>{err}</div>
+            <div className="loginRegisterDiv">
+                {err && <div className="error">{err}</div>}
                 <form onSubmit={handleSubmit}>
-                    <div>
-                        <TextField name="username" label="Username" value={username} onChange={e => setUsername(e.target.value)} />
+                    <div className="formRow">
+                        <label>Username:
+                            <Input type="text" id="username" name="username" width="15rem" value={username} onChange={e => setUsername(e.target.value)} />
+                        </label>
                     </div>
-                    <div>
-                        <TextField name="password" label="Password" type="password" value={password} onChange={e => setPassword(e.target.value)} />
+                    <div className="formRow">
+                        <label>Password:
+                            <Input type="password" id="password" name="password" width="15rem" value={password} onChange={e => setPassword(e.target.value)} />
+                        </label>
                     </div>
                     <Button variant="outlined" type="submit">Login</Button>
                 </form>

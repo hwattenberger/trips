@@ -65,7 +65,7 @@ export const TripMap: React.FC<TripMapProps> = ({ center, locations }) => {
                 'type': 'circle',
                 'source': 'legLocations',
                 'paint': {
-                    'circle-color': 'red',
+                    'circle-color': '#ee6c4d',
                     'circle-radius': 10
                 },
                 // 'filter': ['==', '$type', 'Point']

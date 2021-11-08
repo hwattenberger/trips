@@ -19,10 +19,17 @@ module.exports.updateTrip = async (root, args) => {
             });
             if (!foundLeg) Leg.deleteOne({id: leg._id})
         })
-        updatedTrip.legs.forEach(async (leg) => {
+
+        const updatedLegs = [];
+        for (let leg of updatedTrip.legs) {
             const foundLeg = await Leg.findById(leg._id);
-            if (foundLeg) await Leg(leg).save();
+            if (foundLeg) { 
+                console.log("Found!", leg)
+                await foundLeg.updateOne(leg);
+                updatedLegs.push(leg);
+            }
             else {
+                console.log("Not Found!", leg)
                 const activities = [];
 
                 for(let j=0; j<leg.activities.length; j++) {
@@ -33,8 +40,11 @@ module.exports.updateTrip = async (root, args) => {
                 const newLeg = new Leg(leg);
                 newLeg.activities = activities;
                 await newLeg.save();
+                updatedLegs.push(newLeg);
             }
-        })
+        }
+        updatedTrip.legs = updatedLegs;
+        console.log("updated trip", updatedTrip)
         const trip = await Trip.findByIdAndUpdate(updatedTrip._id, updatedTrip, {new: true, omitUndefined:true})
         return trip;
     }
