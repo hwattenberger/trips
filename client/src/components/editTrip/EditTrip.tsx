@@ -133,8 +133,46 @@ export const EditTrip: React.FC = () => {
         return legs[ix - 1].legTo;
     }
 
+    const validateDates = (): string | null => {
+        if (!from) return "Please enter a trip from date";
+
+        let prevDate = dayjs(from);
+
+        if (!prevDate.isSame(legs[0].legFrom)) return "First leg should have from date of trip from date";
+
+        for (let i = 0; i < legs.length; i++) {
+            if (!legs[i].legFrom) return "All legs should have a from date"
+            if (!prevDate.isSame(dayjs(legs[i].legFrom)) && !prevDate.isSame(dayjs(legs[i].legFrom).subtract(1, 'day'))) return "Leg from date should be the same day or the day after the last leg ended or the trip started"
+            if (!legs[i].legTo && i !== legs.length - 1) return "All legs should have a to date";
+            if (legs[i].legTo && dayjs(legs[i].legFrom).isAfter(legs[i].legTo)) return "For each leg, the from date must be before to date";
+            prevDate = dayjs(legs[i].legTo);
+        }
+        if (to && !prevDate.isSame(to)) return "The to date of the last leg should equal to the to date of the trip";
+
+        return null;
+    }
+
+    const validateTrip = () => {
+        if (!tripInfo.tripName) return "Please enter a trip name";
+
+        for (let leg of legs) {
+            if (!leg.location?.place_name) return "Every leg must have a location";
+        }
+
+        return null;
+    }
+
     const onClickUpdateTrip = (e: React.SyntheticEvent) => {
         e.preventDefault();
+        setErr("");
+
+        let validationError = validateDates();
+        if (!validationError) validationError = validateTrip();
+
+        if (validationError) {
+            setErr(validationError);
+            return;
+        }
 
         const startDtDayJs = dayjs(from);
         let dayLength;
@@ -183,10 +221,8 @@ export const EditTrip: React.FC = () => {
             description: tripInfo.description,
             legs: createLegs
         }
-        console.log("test", createTripInput)
         updateTrip({ variables: { input: createTripInput } });
         setOpen(true);
-        setErr("");
     }
 
     if (locationQuery.loading) return <>Loading...</>

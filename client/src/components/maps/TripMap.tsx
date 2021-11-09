@@ -16,12 +16,9 @@ interface TripMapLocation {
 }
 
 export const TripMap: React.FC<TripMapProps> = ({ center, locations }) => {
-    const mapContainer = useRef<null | HTMLDivElement>(null);
-    const [map, setMap] = useState<null | mapboxgl.Map>();
-    // const markers = useRef<null | mapboxgl.Marker[]>([]);
+    const mapContainer = useRef<HTMLDivElement | null>(null);
+    const [map, setMap] = useState<mapboxgl.Map | undefined>();
 
-    // const [zoom, setZoom] = useState(5);
-    // const [point, setPoint] = useState<null | latLng>(null);
 
     useEffect(() => {
         if (map) {
@@ -35,7 +32,8 @@ export const TripMap: React.FC<TripMapProps> = ({ center, locations }) => {
     useEffect(() => {
         // if (map) return; // initialize map only once
         const newMap = new mapboxgl.Map({
-            container: mapContainer.current,
+            container:
+                mapContainer.current === undefined || mapContainer.current === null ? "" : mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v11',
             center: center,
             zoom: 3

@@ -131,7 +131,7 @@ export const LOGIN = gql`
 export const CREATE_USER = gql`
   mutation Mutation($input: UserInput) {
     userCreate(input: $input) {
-    username
+      value
   }
 }
 `

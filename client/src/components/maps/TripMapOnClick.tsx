@@ -10,11 +10,6 @@ interface TripMapProps {
     setTempLocation: (tempLoc: MapboxGeocoder.Result | null) => null;
 }
 
-// interface latLng {
-//     lat: number,
-//     lng: number
-// }
-
 const axiosSettings = {
     params: {
         access_token: mapboxgl.accessToken,
@@ -24,11 +19,9 @@ const axiosSettings = {
 }
 
 const TripMapOnClick: React.FC<TripMapProps> = ({ setTempLocation }) => {
-    const mapContainer = useRef<null | HTMLDivElement>(null);
+    const mapContainer = useRef<HTMLDivElement | null>(null);
     const map = useRef<null | mapboxgl.Map>(null);
     const marker = useRef<null | mapboxgl.Marker>();
-    // const [point, setPoint] = useState<null | latLng>(null);
-    // const [searchOptions, setSearchOptions] = useState();
 
     useEffect(() => {
         const lat = 42.35;
@@ -36,7 +29,8 @@ const TripMapOnClick: React.FC<TripMapProps> = ({ setTempLocation }) => {
 
         if (map.current) return; // initialize map only once
         map.current = new mapboxgl.Map({
-            container: mapContainer.current,
+            container:
+                mapContainer.current === undefined || mapContainer.current === null ? "" : mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v11',
             center: [lng, lat],
             zoom: 3
@@ -50,7 +44,6 @@ const TripMapOnClick: React.FC<TripMapProps> = ({ setTempLocation }) => {
         map.current.on('click', (e) => {
             if (!map.current) return;
             const lngLat = e.lngLat;
-            // setPoint(lngLat);
             if (marker.current) marker.current.setLngLat([lngLat.lng, lngLat.lat])
 
             const currentZoom = map.current.getZoom();
@@ -71,8 +64,6 @@ const TripMapOnClick: React.FC<TripMapProps> = ({ setTempLocation }) => {
     const search = (lng: number, lat: number) => {
         axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json`, axiosSettings)
             .then((res) => {
-                console.log(res);
-                // setSearchOptions(res.data.features[0]);
                 setTempLocation(res.data.features[0]);
             })
     }

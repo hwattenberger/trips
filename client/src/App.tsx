@@ -31,19 +31,23 @@ const theme = createTheme({
   },
 });
 
-
-
 function App() {
   const [token, setToken] = useState<string | null>(localStorage.getItem('login-user-token'));
   const { loading, error, data } = useQuery(CHECK_TOKEN);
 
   useEffect(() => {
     if (error) {
-      console.log("ERRR")
       setToken(null);
       localStorage.removeItem('login-user-token');
     }
   }, [error])
+
+  useEffect(() => {
+    if (data && data.checkToken && !data.checkToken.hasToken) {
+      setToken(null);
+      localStorage.removeItem('login-user-token');
+    }
+  }, [data])
 
   return (
     <BrowserRouter>
@@ -71,7 +75,7 @@ function App() {
                 <Login setToken={setToken} />
               </Route>
               <Route path="/register">
-                <Register />
+                <Register setToken={setToken} />
               </Route>
               <Route path="/">
                 <Landing />

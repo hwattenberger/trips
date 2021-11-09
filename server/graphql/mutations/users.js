@@ -26,14 +26,13 @@ module.exports.createUser = async (root, args) => {
     }
 
     const newUser = new User(args.input);
-    
+    console.log("test", newUser)
     newUser.password = await bcrypt.hash(newUser.password, 8);
     await newUser.save();
-    return newUser;
+    
+    return { value: jwt.sign({id: newUser._id, username: newUser.username}, process.env.JWT_SECRET, {expiresIn: "1d"}) };
 }
 
-module.exports.checkToken = async (root, args, context) => {
-}
 
 module.exports.login = async (root, args, context) => {
     const user = await User.findOne({username: args.input.username})
@@ -41,18 +40,9 @@ module.exports.login = async (root, args, context) => {
     if (!user) {
         throw new UserInputError('Invalid credentials');
     }
-
-    // const hashedPassword = await bcrypt.hash(args.input.password, 8);
-    // console.log("test", user.password, hashedPassword, args.input.password)
     const validPass = await bcrypt.compare(args.input.password, user.password);
     if (!validPass) throw new UserInputError('Invalid credentials');
 
-    // if (user.password !== hashedPassword) throw new UserInputError('Invalid credentials');
-    // const newUser = new User(args.input);
     console.log("Logging In", args.input, user)
     return { value: jwt.sign({id: user._id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "1d"}) };
-    // const refreshToken = jwt.sign({id: _id, username: username}, process.env.JWT_SECRET, {expiresIn: "7d"});
-    // await newUser.save();
-    // return newUser;
-    // return accessToken;
 }

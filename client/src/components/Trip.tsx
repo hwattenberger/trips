@@ -9,7 +9,7 @@ import { LegI } from '../utility/types';
 
 import { InView } from 'react-intersection-observer';
 
-import { Container, Box, Grid } from '@mui/material';
+import { Container, Grid } from '@mui/material';
 
 const Header = styled.h1`
     margin: 40px 0px 0px 0px;
@@ -22,7 +22,7 @@ const Subtitle = styled.p`
 
 const Trip: React.FC = ({ }) => {
     const { tripId } = useParams<{ tripId?: string }>();
-    const { loading, error, data } = useQuery(GET_TRIP_INFO, { variables: { idOfTrip: tripId } });
+    const { loading, data } = useQuery(GET_TRIP_INFO, { variables: { idOfTrip: tripId } });
     const locationQuery = useQuery(GET_TRIP_LOCATIONS, { variables: { idOfTrip: tripId } });
     const [center, setCenter] = useState<[number, number]>();
 
@@ -43,7 +43,6 @@ const Trip: React.FC = ({ }) => {
     if (loading || locationQuery.loading) return <>Loading</>
     return (
         <Container>
-            {/* // <Box sx={{ flexGrow: 1 }}> */}
             <Grid container spacing={2}>
                 <Grid item xs={12} md={8}>
                     <Header>{data.findTripById.tripName}{data.findTripById.dayLength && ` - ${data.findTripById.dayLength} days`}</Header>
@@ -52,7 +51,6 @@ const Trip: React.FC = ({ }) => {
                 </Grid>
                 <Grid item xs={12} md={4}>
                     {center && <TripMap center={center} locations={locationQuery.data.findTripById.legs} />}
-                    {/* <TripMap lng={data.findTripById.legs[0].location.center[0]} lat={data.findTripById.legs[0].location.center[1]} locations={locationQuery.data.findTripById.legs} /> */}
                 </Grid>
                 <Grid item xs={12} md={8}>
                     {data.findTripById.legs.map((leg: LegI, ix: number) => (
@@ -70,9 +68,7 @@ const Trip: React.FC = ({ }) => {
                         </InView>
                     ))}
                 </Grid>
-                {/* {JSON.stringify(data.findTripById)} */}
             </Grid>
-            {/* // </Box> */}
         </Container>
     );
 }

@@ -130,7 +130,7 @@ const typeDefs = gql`
     }
 
     type Mutation {
-        userCreate(input: UserInput): User
+        userCreate(input: UserInput): Token
         userUpdate(input: UserInput): User
         login(input: LoginInput): Token
         tripCreate(input: TripInput): Trip

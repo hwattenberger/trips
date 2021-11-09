@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Container, TextField } from '@mui/material';
+import { Button, Container } from '@mui/material';
 import { LOGIN } from './../../query/query';
 import { useMutation } from '@apollo/client';
 import { Input } from "./../../styles/general";
 
 interface LoginProps {
-    setToken: (token: React.Dispatch<React.SetStateAction<string>>) => void
+    setToken: React.Dispatch<React.SetStateAction<string | null>>
 }
 
 const Login: React.FC<LoginProps> = ({ setToken }) => {

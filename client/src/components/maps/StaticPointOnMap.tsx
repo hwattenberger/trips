@@ -16,14 +16,15 @@ interface TripMapProps {
 // }
 
 const StaticPointOnMap: React.FC<TripMapProps> = ({ lng, lat }) => {
-    const mapContainer = useRef<null | HTMLDivElement>(null);
+    const mapContainer = useRef<HTMLDivElement | null>(null);
     const map = useRef<null | mapboxgl.Map>(null);
     const marker = useRef<null | mapboxgl.Marker>();
 
     useEffect(() => {
         if (map.current) return; // initialize map only once
         map.current = new mapboxgl.Map({
-            container: mapContainer.current,
+            container:
+                mapContainer.current === undefined || mapContainer.current === null ? "" : mapContainer.current,
             style: 'mapbox://styles/mapbox/streets-v11',
             center: [lng, lat],
             zoom: 5

@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Container, TextField } from '@mui/material';
+import { Button, Container } from '@mui/material';
 import { CREATE_USER } from './../../query/query'
 import { useMutation } from '@apollo/client';
 import { Input } from "./../../styles/general";
 
-const Register: React.FC = () => {
+interface RegisterProps {
+    setToken: React.Dispatch<React.SetStateAction<string | null>>
+}
+
+const Register: React.FC<RegisterProps> = ({ setToken }) => {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const [err, setErr] = useState("");
@@ -16,11 +20,16 @@ const Register: React.FC = () => {
         }
     });
 
-    // useEffect(() => {
-    //     if (result.data) {
-    //         console.log("Registered!");
-    //     }
-    // }, [result.data])
+    useEffect(() => {
+        if (result.data && result.data.userCreate.value) {
+            console.log(result.data)
+            const token = result.data.userCreate.value;
+            setToken(token);
+            localStorage.setItem('login-user-token', token);
+            window.location.href = "/";
+        }
+    }, [result.data]) // eslint-disable-line
+
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();

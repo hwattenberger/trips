@@ -9,8 +9,8 @@ const resolvers = {
         allUsers: async () => await User.find({}),
         findUserByName: async (root, args) => await User.findOne({username: args.username}),
         checkToken: async (root, args, context) => {
-            if (context.currentUser && context.currentUser._id) return true;
-            return false;
+            if (context.currentUser && context.currentUser._id) return {hasToken: true};
+            return {hasToken: false};
         },
         allTrips: async () => await Trip.find({}).populate({path:'user'}),
         findMyTrips: async (root, args, context) => {
