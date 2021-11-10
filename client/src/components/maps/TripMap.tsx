@@ -2,17 +2,17 @@ import React, { useState, useRef, useEffect } from 'react'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
 import './TripMap.css'
+import { LocationI } from './../../utility/types';
 
 mapboxgl.accessToken = "pk.eyJ1IjoiaXdpc2hpaGFkIiwiYSI6ImNrdjJvejB4ZDBkb2cyb3A2bDY2YWY3eGoifQ.T-mys_-QQCK4CxmVnhiVxg";
 
 interface TripMapProps {
     center: mapboxgl.LngLatLike,
-    locations: TripMapLocation[]
+    locations: LocationsI[]
 }
 
-interface TripMapLocation {
-    center: mapboxgl.LngLatLike,
-    place_name: string
+interface LocationsI {
+    location: LocationI
 }
 
 export const TripMap: React.FC<TripMapProps> = ({ center, locations }) => {
@@ -30,7 +30,6 @@ export const TripMap: React.FC<TripMapProps> = ({ center, locations }) => {
     }, [center])
 
     useEffect(() => {
-        // if (map) return; // initialize map only once
         const newMap = new mapboxgl.Map({
             container:
                 mapContainer.current === undefined || mapContainer.current === null ? "" : mapContainer.current,
@@ -66,7 +65,6 @@ export const TripMap: React.FC<TripMapProps> = ({ center, locations }) => {
                     'circle-color': '#ee6c4d',
                     'circle-radius': 10
                 },
-                // 'filter': ['==', '$type', 'Point']
             })
 
             setMap(newMap);

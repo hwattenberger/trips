@@ -90,6 +90,7 @@ export const GET_MY_TRIPS = gql`
       startDay
       startYear
       description
+      dayLength
   }
 }
 `

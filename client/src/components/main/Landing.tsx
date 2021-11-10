@@ -70,7 +70,7 @@ const Landing: React.FC<LandingProps> = ({ }) => {
                 <Link to={`/register`}><Button variant="contained">Sign Up</Button></Link>
             </div>
             <div>
-                <h2>Great Trips</h2>
+                <h2>See Great Trips</h2>
                 <Grid container justifyContent="center" spacing={2}>
                     {getFeaturedTrips.data && getFeaturedTrips.data.findFeaturedTrips.map((trip: featuredTripI, ix: number) => (
                         <Grid key={trip._id} item>

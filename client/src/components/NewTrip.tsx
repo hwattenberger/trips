@@ -15,7 +15,7 @@ import { LegI, TripI } from './../utility/types'
 
 export interface LocationSaveServerI {
     place_name?: string,
-    center?: [number, number],
+    center?: number[],
     mapboxId?: string | number | undefined,
     bbox?: number[],
     country_short_code?: string,
@@ -133,7 +133,6 @@ export const NewTrip: React.FC = () => {
 
         const createLegs = legs.map((leg: LegI) => {
             const updLocation: LocationSaveServerI = { ...leg.location };
-            console.log("leg", leg)
             if (leg.location && leg.location.country_short_code) updLocation.countryShortCode = leg.location.country_short_code;
             delete updLocation.country_short_code;
 

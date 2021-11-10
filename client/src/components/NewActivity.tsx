@@ -46,26 +46,20 @@ export const NewActivity: React.FC<NewActivityProps> = ({ createActivity }) => {
         return "outlined";
     }
 
-    // const isButtonDisabled = () => {
-    //     if (newActivity.type && newActivity.place) return null;
-    //     return "disabled";
-    // }
+    const allAddActivity = () => {
+        if (newActivity.type && newActivity.place && newActivity.rating) return true;
+        return false;
+    }
 
     return (
         <div className="newActivity">
-            <span>Add Activity</span>
+            <span className="boldText">Add Activity</span>
             <div className="formRow activityTopRow">
                 {/* <span>Add Activity</span> */}
                 <Button variant={isSelectedVariant("poi")} size="small" name="poi" onClick={toggleType}>🏰 Point of Interest</Button>
                 <Button variant={isSelectedVariant("food")} size="small" name="food" onClick={toggleType}>🍜 Food</Button>
                 <Button variant={isSelectedVariant("other")} size="small" name="other" onClick={toggleType}>⛵ Other Activity</Button>
-                {/* <FormControl sx={{ m: 1, minWidth: 120 }}>
-                    <Select value={newActivity.type} name="type" size="small" onChange={onInputChange}>
-                        <MenuItem value="poi">🏰 Point of Interest</MenuItem>
-                        <MenuItem value="food">🍜 Food</MenuItem>
-                        <MenuItem value="other">⛵ Other Activity</MenuItem>
-                    </Select>
-                </FormControl> */}
+
                 <Rating name="rating" value={newActivity.rating} onChange={onRatingChange} className="flexend" />
             </div>
             <div className="formRow">
@@ -79,8 +73,8 @@ export const NewActivity: React.FC<NewActivityProps> = ({ createActivity }) => {
                     <div><textarea id="comments" name="comments" rows={3} value={newActivity.comments} onChange={onInputChange} /></div>
                 </label>
             </div>
-            {newActivity.type && newActivity.place && <Button variant="contained" size="small" onClick={onClickAddActivity}>Add</Button>}
-            {(!newActivity.type || !newActivity.place) && <Button variant="contained" size="small" disabled onClick={onClickAddActivity}>Add</Button>}
+            {allAddActivity() && <Button variant="contained" size="small" onClick={onClickAddActivity}>Add</Button>}
+            {!allAddActivity() && <Button variant="contained" size="small" disabled onClick={onClickAddActivity}>Add</Button>}
         </div >
     );
 }

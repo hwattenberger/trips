@@ -12,16 +12,27 @@ import Calendar from './../Calendar';
 import NewLeg from './../NewLeg';
 import NewTravelBetween from './../NewTravelBetween';
 
-import { LegI, TripI } from './../../utility/types';
+import { LegI, TripI, TravelBetweenI, ActivityI } from './../../utility/types';
 
 
 export interface LocationSaveServerI {
     place_name?: string,
-    center?: [number, number],
+    center?: number[],
     mapboxId?: string | number | undefined,
     bbox?: number[],
     country_short_code?: string,
     countryShortCode?: string
+}
+
+export interface LegSaveServerI {
+    _id: string,
+    location: LocationSaveServerI,
+    comments: string,
+    rating: number,
+    travelAfter: TravelBetweenI,
+    startDay: number,
+    endDay: number,
+    activities: [ActivityI]
 }
 
 const emptyTrip: TripI = {
@@ -74,7 +85,7 @@ export const EditTrip: React.FC = () => {
             }
 
             const savedLegs: LegI[] = [];
-            locationQuery.data.findTripById.legs.forEach((leg) => {
+            locationQuery.data.findTripById.legs.forEach((leg: LegSaveServerI) => {
                 const legStartDay = dayjs(startDate).add(leg.startDay, 'day').toDate();
                 let legEndDay;
                 if (leg.endDay) legEndDay = dayjs(startDate).add(leg.endDay, 'day').toDate();
@@ -183,7 +194,7 @@ export const EditTrip: React.FC = () => {
 
         const createLegs = legs.map((leg: LegI) => {
             const updLocation: LocationSaveServerI = { ...leg.location };
-            console.log("leg", leg)
+
             if (leg.location && leg.location.country_short_code) updLocation.countryShortCode = leg.location.country_short_code;
             delete updLocation.country_short_code;
 

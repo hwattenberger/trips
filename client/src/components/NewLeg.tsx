@@ -5,10 +5,11 @@ import { Input } from "./../styles/general"
 import { Search } from './Search';
 import { NewActivity } from './NewActivity';
 import TripMapOnClick from './maps/TripMapOnClick';
+import Activity from './Activity';
 
 import { LegI, ActivityI, LocationI } from './../utility/types';
 
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, Rating } from '@mui/material';
 
 interface NewLegProps {
     startDt: Date | undefined,
@@ -105,8 +106,8 @@ const NewLeg: React.FC<NewLegProps> = ({ startDt, endDt, updateLeg, ix, legInfo 
                 <div className="formRow">
                     Activities:
                     {legInfo.activities.length === 0 && <div>- None (add activities below)</div>}
-                    {legInfo.activities.map((activity, ix) => (
-                        <div key={ix}>{activityIcon(activity.type)} - {activity.place}</div>
+                    {legInfo.activities.map((activity) => (
+                        <Activity key={activity._id} activity={activity} />
                     ))}
                     <NewActivity createActivity={createActivity} />
                 </div>

@@ -6,6 +6,7 @@ import { TripMap } from './maps/TripMap';
 import TravelBetween from './TravelBetween';
 import styled from 'styled-components';
 import { LegI } from '../utility/types';
+import Activity from './Activity';
 
 import { InView } from 'react-intersection-observer';
 
@@ -24,7 +25,7 @@ const Trip: React.FC = ({ }) => {
     const { tripId } = useParams<{ tripId?: string }>();
     const { loading, data } = useQuery(GET_TRIP_INFO, { variables: { idOfTrip: tripId } });
     const locationQuery = useQuery(GET_TRIP_LOCATIONS, { variables: { idOfTrip: tripId } });
-    const [center, setCenter] = useState<[number, number]>();
+    const [center, setCenter] = useState<number[]>();
 
     const monthArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
@@ -33,7 +34,7 @@ const Trip: React.FC = ({ }) => {
     }, [data])
 
     const startDate = () => {
-        return `${monthArr[data.findTripById.startMonth + 1]}`
+        return `${monthArr[data.findTripById.startMonth - 1]}`
     }
 
     const updateMap = (inView: boolean, leg: LegI) => {
@@ -58,10 +59,12 @@ const Trip: React.FC = ({ }) => {
                             <div className="newTripLegDiv establishedTripLegDiv">
                                 <h2>Leg {ix + 1} {leg.location && <>- {leg.location.place_name}</>}</h2>
                                 <div>
-                                    {/* {leg.location && <h3>Location - {leg.location.place_name}</h3>} */}
+                                    {leg.comments && <> {leg.comments}</>}
                                 </div>
                                 <div>
-                                    {leg.comments && <> {leg.comments}</>}
+                                    {leg.activities.map((activity) => (
+                                        <Activity key={activity._id} activity={activity} />
+                                    ))}
                                 </div>
                             </div>
                             <TravelBetween leg={leg} />

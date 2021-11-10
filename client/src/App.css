@@ -142,6 +142,35 @@ h2 {
     padding: 6px;
 }
 
+.cardButtons {
+    margin-top: 8px;
+}
+
+.cardButtons button {
+    margin-right: 8px;
+}
+
+.acceptedActivity {
+    padding: 4px;
+    background-color: rgb(0, 0, 0, .15);
+    margin-top: 6px;
+    border-radius: 4px;
+}
+
+.acceptedActivity .activityLine1 {
+    display: flex;
+}
+
+.acceptedActivity .ratingRight {
+    margin-left: auto;
+    /* display: absolute;
+    left: 5px; */
+}
+
+.boldText {
+    font-weight: 600;
+}
+
 @media (min-width: 1100px) {
     .mapSinglePoint {
         position: absolute;
