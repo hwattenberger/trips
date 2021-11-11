@@ -6,7 +6,7 @@ import { useParams } from "react-router";
 import { EDIT_TRIP, GET_TRIP_INFO } from './../../query/query';
 
 import { Input } from "./../../styles/general"
-import { Button, Snackbar } from '@mui/material';
+import { Button, Snackbar, Alert } from '@mui/material';
 
 import Calendar from './../Calendar';
 import NewLeg from './../NewLeg';
@@ -62,6 +62,7 @@ export const EditTrip: React.FC = () => {
     const [legs, setLegs] = useState<LegI[]>([]);
     const [err, setErr] = useState("");
     const [open, setOpen] = useState(false);
+    const [openError, setOpenError] = useState(false);
 
     const { tripId } = useParams<{ tripId?: string }>();
     const locationQuery = useQuery(GET_TRIP_INFO, { variables: { idOfTrip: tripId } });
@@ -118,6 +119,10 @@ export const EditTrip: React.FC = () => {
 
     const handleSnackClose = () => {
         setOpen(false);
+    }
+
+    const handleSnackErrorClose = () => {
+        setOpenError(false);
     }
 
     const createFirstLeg = () => {
@@ -182,6 +187,7 @@ export const EditTrip: React.FC = () => {
 
         if (validationError) {
             setErr(validationError);
+            setOpenError(true);
             return;
         }
 
@@ -240,7 +246,6 @@ export const EditTrip: React.FC = () => {
 
     return (
         <div>
-            {err && <div>Error: {err}</div>}
             <h1>Edit Trip</h1>
             <div className="tripForm">
                 <div className="formRow">
@@ -273,6 +278,13 @@ export const EditTrip: React.FC = () => {
                 onClose={handleSnackClose}
                 message="Trip updated"
             />
+            <Snackbar
+                open={openError}
+                autoHideDuration={8000}
+                onClose={handleSnackErrorClose}
+                anchorOrigin={{ horizontal: 'center', vertical: 'top' }}>
+                <Alert onClose={handleSnackErrorClose} severity="error" sx={{ width: '100%' }}>{err}</Alert>
+            </Snackbar>
         </div>
     );
 }

@@ -2,10 +2,10 @@ import React, { ChangeEvent, useState } from 'react'
 import { useMutation } from '@apollo/client';
 import dayjs from 'dayjs';
 
-import { CREATE_TRIP } from './../query/query'
+import { CREATE_TRIP, GET_TRIPS, GET_MY_TRIPS } from './../query/query'
 
 import { Input } from "./../styles/general"
-import { Button, Snackbar } from '@mui/material';
+import { Button, Snackbar, Alert } from '@mui/material';
 
 import Calendar from './Calendar';
 import NewLeg from './NewLeg';
@@ -49,16 +49,22 @@ export const NewTrip: React.FC = () => {
     const [legs, setLegs] = useState<LegI[]>([]);
     const [err, setErr] = useState("");
     const [open, setOpen] = useState(false);
+    const [openError, setOpenError] = useState(false);
 
     const [createTrip] = useMutation(CREATE_TRIP, {
         onError: (error) => {
             if (error.graphQLErrors[0]) setErr(error.graphQLErrors[0].message)
             else setErr("Saving message was not successful");
-        }
+        },
+        refetchQueries: [{ query: GET_TRIPS }, { query: GET_MY_TRIPS }]
     });
 
     const handleSnackClose = () => {
         setOpen(false);
+    }
+
+    const handleSnackErrorClose = () => {
+        setOpenError(false);
     }
 
     const createFirstLeg = () => {
@@ -123,6 +129,7 @@ export const NewTrip: React.FC = () => {
 
         if (validationError) {
             setErr(validationError);
+            setOpenError(true);
             return;
         }
 
@@ -183,7 +190,6 @@ export const NewTrip: React.FC = () => {
 
     return (
         <div>
-            {err && <div>Error: {err}</div>}
             <h1>Create Trip</h1>
             <div className="tripForm">
                 <div className="formRow">
@@ -216,6 +222,13 @@ export const NewTrip: React.FC = () => {
                 onClose={handleSnackClose}
                 message="Trip saved"
             />
+            <Snackbar
+                open={openError}
+                autoHideDuration={8000}
+                onClose={handleSnackErrorClose}
+                anchorOrigin={{ horizontal: 'center', vertical: 'top' }}>
+                <Alert onClose={handleSnackErrorClose} severity="error" sx={{ width: '100%' }}>{err}</Alert>
+            </Snackbar>
         </div>
     );
 }
