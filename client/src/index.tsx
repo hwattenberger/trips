@@ -17,7 +17,6 @@ const authLink = setContext((_, { headers }) => {
 })
 
 const baseUrl = process.env.REACT_APP_SERVER_BASE_URL;
-console.log("BaseURL", baseUrl)
 const httpLink = new HttpLink({ uri: `${baseUrl}/graphql` });
 
 const client = new ApolloClient({
