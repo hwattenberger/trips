@@ -24,7 +24,6 @@
 - [Problem Statement/Business Case](#businesscase)
 - [Built Using](#built_using)
 - [Features](#about)
-- [Data Model](#datamodel)
 - [See Demo and/or Live Example](#example)
 - [Learnings](#learnings)
 - [TODOs](#todos)
@@ -45,50 +44,25 @@ When I took a sabbatical trip I wanted to see where other people had gone and wh
 - Also Mapbox for all the maps
 
 ## 🧐 Features <a name = "about"></a>
-For Managers (Only available for users who are marked as admins):
-- Create staff roles (sever, manager, host, etc.) and [shift types](https://hilary-wattenberger.netlify.app/images/Scheduling%20App%20-%20Create%20and%20update%20shifts.png) (AM server shift, PM host shift)
-- [Manage staff](https://hilary-wattenberger.netlify.app/images/Scheduling%20App%20-%20Update%20Staff%20Information.png) (activate & deactivate/turn into admin/manage staff information including staff role, image)
-- Create [weekly schedules](https://hilary-wattenberger.netlify.app/images/Scheduling%20App%20-%20Schedule.png) to publish to your staff.  More details on scheduling below.
-
-For Staff:
-- [Update weekly availability](https://hilary-wattenberger.netlify.app/images/Scheduling%20App%20-%20Specify%20Your%20Schedule.png) and user information
-- [Create time off requests](https://hilary-wattenberger.netlify.app/images/Scheduling%20App%20-%20Request%20Time%20Off.png)
-- [See upcoming shifts](https://hilary-wattenberger.netlify.app/images/Scheduling%20App%20-%20View%20Upcoming%20Shifts.png)
-
-General Features:
-- [Authentication](https://hilary-wattenberger.netlify.app/images/Scheduling%20App%20-%20Register.png) either natively with a username and password OR through Google
-
-Scheduling information:
-- Schedules are created from a combination of each user's specified weekly availability and their time off requests.
-- You can copy forward the schedule from last week and it will keep all scheduled shifts unless users have requested time off (so you don't mistakenly schedule someone for a shift when they aren't available).
-- Users are scheduled for a specific shift on a specific date.  You can schedule them in the scheduling activity either by selecting a shift for that user or dragging an open shift to their user.
-- You can schedule a user for multiple shifts in a day.
-- Filter to only show shifts for a specific user role (for example servers).
-- [Modify specific days](https://hilary-wattenberger.netlify.app/images/Scheduling%20App%20-%20Change%20People%20Needed.png) to require less or more for a specific shift.  For example on a holiday you may want to close or expect 3 instead of 5 servers for the evening shift.
-
-## Data Model <a name = "datamodel"></a>
-Here is the data model for this project:
-<img width=800px src="https://hilary-wattenberger.netlify.app/DatabaseDiagramSchedulingApp.png" alt="Sample workflow">
+- View all trips.  Use map to filter down to trips in areas of the world you are most interested in.
+- View a specific trip.  See a map of the trip's locations and information about each leg.
+- Login & register.  When you register and login, you can create and edit your own trips.
+- Create trip.  Create a trip with as many legs as needed (a leg is a specific destination).
+- Edit trip.  Edit the trip you created.
 
 ## 🏁 See Demo and/or Live Example <a name = "example"></a>
 See this image for workflow (coming soon!):
 <!-- <img width=800px src="https://hilary-wattenberger.netlify.app/images/SpotifyProject2.gif" alt="Sample workflow"> -->
 <br>
-You can access the live application here: https://hwattenberger-schedulingapp.netlify.app/schedule <br><br>
+You can access the live application here: https://hwattenberger-trips.netlify.app/ <br><br>
 If you don't want to create your own user, you can use: <br>
-Admin User: willy@willy.com Password: willy <br>
-Non-Admin User: jill@jill.com Password: jill
+User: hilary Password: hilary
 
 ## 🎈 What did I learn? <a name="learnings"></a>
-This project took a while and I learned loads.
-- Data model.  I went through a number of iterations on how to store schedules.  Ultimately I have a much better understanding of when to make certain choices of creating new Schemas/Models/Documents and when to imbed.
-- MongoDB.  I hadn't used pipelines before and spent a good deal of time learning how to extract complex data from a database.
-- Dates.  Dealing with dates with a server with a different timezone.  I learned some but still have more to learn here.
-- Authentication.  I understanding authentication a lot more.  Certainly using passport but also middleware in NodeJS.  As part of this project, I did research into sessions & JWT.  Happy that I was able to use Google auth in addition to native.
-- Deploying.  This is deployed in Heroku on the back-end and Netlify for React so learning about how to do that and also dealing with CORS.
-- Code organization.  I am reasonably happy with the output but I think there's still opportunity to improve especially with my React components (could be more split up into more appropriate folders).
-- React.  I spent a lot of time on the React portion of this application.  Among other things, I now understanding much better useContext and useReducer.
-- MaterialUI.  I wanted to try using something instead of making everything from scratch.  It certainly saved some time and I was able to see many different components.  I liked using the Snackbar - I'd use that more broadly in future projects to help users understand that what they are doing is successful (or unsuccesful)
+Here are some of the things that I learned:
+- JWT. I previously did authentication through sessions and I wanted to try using JWT.
+- GraphQL. This was one of the main reasons I did this project - I wanted to use graphQL full stack with Apollo. Great to experience something different and it was quite a change. I can see why some people really like it.
+- Lots of integration with mapbox. I had a lot of fun with mapbox and used it in many different ways. You could use forward geocoding and reverse geocoding. You could map out your trip. You could use clusters to drill down on a group of trips.
 
 ## 🎈 Todos <a name="todos"></a>
 I have a long list of things I'd work on if I had more time.  Here are some of them:
