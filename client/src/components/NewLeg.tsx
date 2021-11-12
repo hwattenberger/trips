@@ -1,7 +1,7 @@
 import React, { ChangeEvent, useEffect, useState } from 'react'
 
 import Calendar from "./Calendar"
-import { Input } from "./../styles/general"
+// import { Input } from "./../styles/general"
 import { Search } from './Search';
 import { NewActivity } from './NewActivity';
 import TripMapOnClick from './maps/TripMapOnClick';
@@ -9,7 +9,7 @@ import Activity from './Activity';
 
 import { LegI, ActivityI, LocationI } from './../utility/types';
 
-import { Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Button, Rating } from '@mui/material';
+import { Dialog, DialogActions, DialogContent, DialogTitle, Button } from '@mui/material';
 
 interface NewLegProps {
     startDt: Date | undefined,

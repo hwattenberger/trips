@@ -58,7 +58,9 @@ const Trip: React.FC = ({ }) => {
                         <InView as="div" key={leg._id} onChange={(inView) => updateMap(inView, leg)}>
                             <div className="newTripLegDiv establishedTripLegDiv">
                                 <h2>Leg {ix + 1} {leg.location && <>- {leg.location.place_name}</>}</h2>
-                                <div>
+                                {leg.endDay && <Subtitle>Day {leg.startDay} to Day {leg.endDay}</Subtitle>}
+                                {!leg.endDay && <Subtitle>From day {leg.startDay}. Ongoing.</Subtitle>}
+                                <div className="legComments">
                                     {leg.comments && <> {leg.comments}</>}
                                 </div>
                                 <div>

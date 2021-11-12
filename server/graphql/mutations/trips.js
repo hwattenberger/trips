@@ -80,3 +80,26 @@ module.exports.createTrip = async (root, args, context) => {
     console.log("New Trip", newTrip)
     return newTrip;
 }
+
+module.exports.getTripLocations = async (root, args) => {
+    const tripLocs = await Trip.aggregate([{
+        $lookup: {
+            from: "legs",
+            localField: "legs",
+            foreignField: "_id",
+            as: "legs"
+        }
+    }, {
+        $unwind: '$legs'
+    }, {
+        $project: {
+            "_id": 1,
+            "tripName": 1,
+            location_coord: "$legs.location.center",
+            location_name: "$legs.location.place_name"
+        }
+    }]);
+
+    console.log("Trip Locs", tripLocs)
+    return tripLocs;
+}

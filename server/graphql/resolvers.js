@@ -31,6 +31,7 @@ const resolvers = {
         findFeaturedTrips: async (root, args) => {
             return Trip.find({isFeatured: true}).limit(5);
         },
+        getLocationsforTrips: trips.getTripLocations
     },
     Mutation: {
         //users

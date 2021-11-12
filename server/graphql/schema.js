@@ -60,6 +60,13 @@ const typeDefs = gql`
         hasToken: Boolean
     }
 
+    type TripLocation {
+        _id: String
+        tripName: String
+        location_name: String
+        location_coord: [Float]
+    }
+
 
     input UserInput {
         _id: ID
@@ -127,6 +134,7 @@ const typeDefs = gql`
         findTripsByUser(userId: String!): [Trip!]!
         findTripById(_id: String!): Trip!
         findFeaturedTrips: [Trip!]!
+        getLocationsforTrips: [TripLocation]
     }
 
     type Mutation {

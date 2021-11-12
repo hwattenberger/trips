@@ -1,13 +1,19 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { useQuery } from '@apollo/client'
 import { Link } from "react-router-dom";
-import { GET_TRIPS } from '../query/query';
+import { GET_TRIPS, GET_LOCATIONS_FOR_TRIPS } from '../query/query';
 import { Card, Grid } from '@mui/material';
+import TripsOnMap from './maps/TripsOnMap';
 
 import { TripI } from './../utility/types';
 
 const AllTrips: React.FC = () => {
     const result = useQuery(GET_TRIPS);
+    const result2 = useQuery(GET_LOCATIONS_FOR_TRIPS);
+
+    useEffect(() => {
+        if (result2.data) console.log("Result2", result2.data)
+    }, [result2])
 
     if (result.loading) return <>Loading</>;
 
@@ -16,6 +22,7 @@ const AllTrips: React.FC = () => {
     return (
         <div>
             <h1>All Trips</h1>
+            <TripsOnMap locations={result2.data.getLocationsforTrips} />
             <Grid container justifyContent="center" spacing={2}>
                 {result.data.allTrips.map((trip: TripI) => (
                     <Grid key={trip._id} item>

@@ -105,6 +105,17 @@ export const GET_FEATURED_TRIPS = gql`
 }
 `
 
+export const GET_LOCATIONS_FOR_TRIPS = gql`
+query {
+  getLocationsforTrips {
+    _id
+    tripName
+    location_name
+    location_coord
+  }
+}
+`
+
 export const EDIT_TRIP = gql`
   mutation TripUpdateMutation($input: TripInput) {
   tripUpdate(input: $input) {
