@@ -33,7 +33,7 @@ const theme = createTheme({
 
 function App() {
   const [token, setToken] = useState<string | null>(localStorage.getItem('login-user-token'));
-  const { loading, error, data } = useQuery(CHECK_TOKEN);
+  const { error, data } = useQuery(CHECK_TOKEN);
 
   useEffect(() => {
     if (error) {

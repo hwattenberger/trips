@@ -35,7 +35,7 @@ const StaticPointOnMap: React.FC<TripMapProps> = ({ lng, lat }) => {
         }).setLngLat([lng, lat])
             .addTo(map.current)
 
-    }, []);
+    }, []); // eslint-disable-line
 
     useEffect(() => {
         if (map.current) {
@@ -45,7 +45,7 @@ const StaticPointOnMap: React.FC<TripMapProps> = ({ lng, lat }) => {
 
             if (marker.current) marker.current.setLngLat([lng, lat])
         }
-    }, [lat, lng])
+    }, [lat, lng]) // eslint-disable-line
 
 
 

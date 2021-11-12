@@ -26,7 +26,6 @@ module.exports.createUser = async (root, args) => {
     }
 
     const newUser = new User(args.input);
-    console.log("test", newUser)
     newUser.password = await bcrypt.hash(newUser.password, 8);
     await newUser.save();
     
@@ -43,6 +42,5 @@ module.exports.login = async (root, args, context) => {
     const validPass = await bcrypt.compare(args.input.password, user.password);
     if (!validPass) throw new UserInputError('Invalid credentials');
 
-    console.log("Logging In", args.input, user)
     return { value: jwt.sign({id: user._id, username: user.username}, process.env.JWT_SECRET, {expiresIn: "1d"}) };
 }

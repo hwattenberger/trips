@@ -13,15 +13,15 @@ interface SearchProps {
     location: LocationI | null
 }
 
-interface SearchObject {
-    string: string,
-    object: MapboxGeocoder.Result | null
-}
+// interface SearchObject {
+//     string: string,
+//     object: MapboxGeocoder.Result | null
+// }
 
-const defaultSearch = {
-    string: "",
-    object: null
-}
+// const defaultSearch = {
+//     string: "",
+//     object: null
+// }
 
 const axiosSettings = {
     params: {
@@ -38,16 +38,15 @@ export const Search: React.FC<SearchProps> = ({ setLocation, location }) => {
 
     useEffect(() => {
         return () => debounceSearch.cancel();
-    }, [])
+    }, []) // eslint-disable-line
 
     useEffect(() => {
         if (!searchStr && location && location.place_name) setSearchStr(location.place_name);
-    }, [location])
+    }, [location]) // eslint-disable-line
 
     const search = (currentSearch: String) => {
         axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${currentSearch}.json`, axiosSettings)
             .then((res) => {
-                console.log(res);
                 setSearchOptions(res.data.features);
             })
     }
@@ -81,7 +80,7 @@ export const Search: React.FC<SearchProps> = ({ setLocation, location }) => {
                 </div>
             ))}
             {searchOptions.length > 0 && !location && <StaticPointOnMap lng={searchOptions[0].center[0]} lat={searchOptions[0].center[1]} />}
-            {location && <StaticPointOnMap lng={location.center[0]} lat={location.center[1]} />}
+            {location && location.center && <StaticPointOnMap lng={location.center[0]} lat={location.center[1]} />}
         </div>
     );
 }

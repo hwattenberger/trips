@@ -7,7 +7,7 @@ import './TripMap.css'
 mapboxgl.accessToken = "pk.eyJ1IjoiaXdpc2hpaGFkIiwiYSI6ImNrdjJvejB4ZDBkb2cyb3A2bDY2YWY3eGoifQ.T-mys_-QQCK4CxmVnhiVxg";
 
 interface TripMapProps {
-    setTempLocation: (tempLoc: MapboxGeocoder.Result | null) => null;
+    setTempLocation: React.Dispatch<React.SetStateAction<MapboxGeocoder.Result | null | undefined>>;
 }
 
 const axiosSettings = {
@@ -59,7 +59,7 @@ const TripMapOnClick: React.FC<TripMapProps> = ({ setTempLocation }) => {
             search(lngLat.lng, lngLat.lat)
         })
 
-    }, []);
+    }, []); // eslint-disable-line
 
     const search = (lng: number, lat: number) => {
         axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${lng},${lat}.json`, axiosSettings)

@@ -27,7 +27,7 @@ export const TripMap: React.FC<TripMapProps> = ({ center, locations }) => {
                 zoom: 8
             })
         }
-    }, [center])
+    }, [center]) // eslint-disable-line
 
     useEffect(() => {
         const newMap = new mapboxgl.Map({
@@ -71,7 +71,7 @@ export const TripMap: React.FC<TripMapProps> = ({ center, locations }) => {
         })
 
         return () => newMap.remove();
-    }, []);
+    }, []); // eslint-disable-line
 
     return (
         <div className="mapMultiPoint">

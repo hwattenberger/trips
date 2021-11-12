@@ -6,11 +6,7 @@ import { Card, Grid, Button } from '@mui/material';
 
 import { TripI } from './../utility/types';
 
-interface MyTripsProps {
-
-}
-
-const MyTrips: React.FC<MyTripsProps> = ({ }) => {
+const MyTrips: React.FC = () => {
     const { loading, data } = useQuery(GET_MY_TRIPS);
 
     if (loading) <>Loading...</>
@@ -21,7 +17,6 @@ const MyTrips: React.FC<MyTripsProps> = ({ }) => {
             <Grid container justifyContent="center" spacing={2}>
                 {data && data.findMyTrips.map((trip: TripI) => (
                     <Grid key={trip._id} item>
-                        {/* <Link to={`/trips/${trip._id}`}> */}
                         <Card sx={{ width: 200, backgroundColor: '#98c1d9', textAlign: 'center', height: 150, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '2px' }}>
                             <h3>{trip.tripName}</h3>
                             {trip.dayLength} {trip.dayLength === 1 ? 'day' : 'days'}
@@ -30,7 +25,6 @@ const MyTrips: React.FC<MyTripsProps> = ({ }) => {
                                 <Link to={`/trips/${trip._id}/edit`}><Button variant="outlined" size="small">Edit</Button></Link>
                             </div>
                         </Card>
-                        {/* </Link> */}
                     </Grid>
                 ))}
             </Grid>

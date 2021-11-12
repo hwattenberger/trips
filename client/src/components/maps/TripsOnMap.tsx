@@ -2,12 +2,15 @@ import React, { useState, useRef, useEffect } from 'react'
 import 'mapbox-gl/dist/mapbox-gl.css';
 import mapboxgl from 'mapbox-gl';
 import './TripMap.css'
-import { LocationI } from './../../utility/types';
+import { Button } from '@mui/material';
+import { Geometry, GeoJsonProperties, Feature } from "geojson";
 
 mapboxgl.accessToken = "pk.eyJ1IjoiaXdpc2hpaGFkIiwiYSI6ImNrdjJvejB4ZDBkb2cyb3A2bDY2YWY3eGoifQ.T-mys_-QQCK4CxmVnhiVxg";
 
 interface TripsOnMapProps {
-    locations: TripLocationsI[]
+    locations: TripLocationsI[],
+    setFilterTripIds: React.Dispatch<React.SetStateAction<undefined>>,
+    filterTripIds: any
 }
 
 interface TripLocationsI {
@@ -17,7 +20,7 @@ interface TripLocationsI {
     location_coord: Number[]
 }
 
-const TripsOnMap: React.FC<TripsOnMapProps> = ({ locations }) => {
+const TripsOnMap: React.FC<TripsOnMapProps> = ({ locations, setFilterTripIds, filterTripIds }) => {
     const mapContainer = useRef<HTMLDivElement | null>(null);
     const [map, setMap] = useState<mapboxgl.Map | undefined>();
 
@@ -35,6 +38,10 @@ const TripsOnMap: React.FC<TripsOnMapProps> = ({ locations }) => {
                 'geometry': {
                     'type': 'Point',
                     'coordinates': loc.location_coord
+                },
+                'properties': {
+                    'id': loc._id,
+                    'location_name': loc.location_name
                 }
             }
         })
@@ -46,20 +53,42 @@ const TripsOnMap: React.FC<TripsOnMapProps> = ({ locations }) => {
                     'type': 'FeatureCollection',
                     'features': featureList
                 },
-                cluster: true,
-                clusterMaxZoom: 14,
-                clusterRadius: 50
+                'cluster': true,
+                'clusterMaxZoom': 14,
+                'clusterRadius': 50
             })
 
             newMap.addLayer({
                 'id': 'clusters',
                 'type': 'circle',
                 'source': 'tripLocations',
+                'filter': ['has', 'point_count'],
                 'paint': {
-                    'circle-color': '#ee6c4d',
-                    'circle-radius': 10
+                    'circle-color': '#293241',
+                    'circle-radius': [
+                        'step',
+                        ['get', 'point_count'],
+                        20,
+                        100,
+                        30,
+                        750,
+                        40
+                    ]
                 },
             })
+
+            newMap.addLayer({
+                id: 'unclustered-point',
+                type: 'circle',
+                source: 'tripLocations',
+                filter: ['!', ['has', 'point_count']],
+                paint: {
+                    'circle-color': '#ee6c4d',
+                    'circle-radius': 6,
+                    'circle-stroke-width': 1,
+                    'circle-stroke-color': '#fff'
+                }
+            });
 
             setMap(newMap);
         })
@@ -68,26 +97,48 @@ const TripsOnMap: React.FC<TripsOnMapProps> = ({ locations }) => {
             const features = newMap.queryRenderedFeatures(e.point, {
                 layers: ['clusters']
             });
-            const clusterId = features[0].properties.cluster_id;
-            newMap.getSource('tripLocations').getClusterExpansionZoom(
+            const clusterId = features[0]?.properties?.cluster_id;
+            const source: mapboxgl.AnySourceImpl = newMap.getSource('tripLocations');
+            source.getClusterExpansionZoom(
                 clusterId,
-                (err, zoom) => {
-                    if (err) {
-                        console.log("ERrr", err)
-                        return;
+                (err, zoom: number) => {
+                    if (!err) {
+                        newMap.easeTo({
+                            center: features[0].geometry.coordinates,
+                            zoom: zoom
+                        });
                     }
-
-                    newMap.easeTo({
-                        center: features[0].geometry.coordinates,
-                        zoom: zoom
-                    });
                 }
             );
-            // newMap.getSource('tripLocations').getClusterLeaves(clusterId, features[0].properties.point_count, 0, (err, features) => {
-            //     if (!err) {
-            //         console.log("Test", features)
-            //     }
-            // })
+            source.getClusterLeaves(clusterId, features[0]?.properties?.point_count, 0, (err: any, features: Feature<Geometry, GeoJsonProperties>[]) => {
+                if (!err) {
+                    const filterIds: any = {};
+                    features?.forEach((feature) => {
+                        if (!feature.properties) return;
+                        if (!filterIds[feature.properties.id]) filterIds[feature.properties.id] = 1;
+                    })
+                    setFilterTripIds(filterIds);
+                }
+            })
+        });
+
+        newMap.on('click', 'unclustered-point', (e: mapboxgl.MapLayerMouseEvent) => {
+            if (!e || !e.features) return "";
+            const coordinates = e.features[0].geometry.coordinates.slice();
+            const location_name = e.features[0].properties.location_name;
+            const trip_id = e.features[0].properties.id;
+
+            while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+            }
+
+            new mapboxgl.Popup()
+                .setLngLat(coordinates)
+                .setHTML(
+                    `Location: ${location_name}<br>
+                    <span class="mapboxPopupLink"><a href="/trips/${trip_id}">View Trip</a></span>`
+                )
+                .addTo(newMap);
         });
 
         newMap.on('mouseenter', 'clusters', () => {
@@ -97,12 +148,27 @@ const TripsOnMap: React.FC<TripsOnMapProps> = ({ locations }) => {
             newMap.getCanvas().style.cursor = '';
         });
 
+        newMap.on('mouseenter', 'unclustered-point', () => {
+            newMap.getCanvas().style.cursor = 'pointer';
+        });
+        newMap.on('mouseleave', 'unclustered-point', () => {
+            newMap.getCanvas().style.cursor = '';
+        });
+
         return () => newMap.remove();
-    }, []);
+    }, []); // eslint-disable-line
+
+    const onClickResetMap = () => {
+        setFilterTripIds(undefined);
+        map?.flyTo({
+            zoom: 1
+        })
+    }
 
     return (
-        <div>
+        <div className="mapAllTrips">
             <div ref={mapContainer} className="map-container" />
+            {filterTripIds && <Button variant="contained" size="small" onClick={onClickResetMap} className="mapFilterBtn">Clear Filter</Button>}
         </div>
     );
 }

@@ -21,7 +21,7 @@ const Subtitle = styled.p`
     font-style: italic;
 `;
 
-const Trip: React.FC = ({ }) => {
+const Trip: React.FC = () => {
     const { tripId } = useParams<{ tripId?: string }>();
     const { loading, data } = useQuery(GET_TRIP_INFO, { variables: { idOfTrip: tripId } });
     const locationQuery = useQuery(GET_TRIP_LOCATIONS, { variables: { idOfTrip: tripId } });

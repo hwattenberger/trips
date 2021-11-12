@@ -175,6 +175,18 @@ h2 {
     margin-top: 8px;
 }
 
+.mapAllTrips {
+    margin-bottom: 12px;
+}
+
+.mapboxPopupLink {
+    color: #ee6c4d;
+}
+
+.mapAllTrips .mapFilterBtn {
+    margin-top: 6px;
+}
+
 @media (min-width: 1100px) {
     .mapSinglePoint {
         position: absolute;

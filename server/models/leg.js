@@ -11,10 +11,6 @@ const LegSchema = new Schema({
         bbox: [Number],
         countryShortCode: String
     },
-    // accommodations: {
-    //     type: String,
-    //     name: String
-    // },
     activities: [{
         type: Schema.Types.ObjectId,
         ref: 'Activity'

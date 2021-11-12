@@ -41,7 +41,7 @@ interface LandingProps {
 
 }
 
-const Landing: React.FC<LandingProps> = ({ }) => {
+const Landing: React.FC<LandingProps> = () => {
     const [scrollImgNum, setScrollImgNum] = useState(0);
     const getFeaturedTrips = useQuery(GET_FEATURED_TRIPS);
 

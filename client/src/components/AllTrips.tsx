@@ -1,39 +1,38 @@
-import React, { useEffect } from 'react'
+import React, { useState } from 'react';
 import { useQuery } from '@apollo/client'
-import { Link } from "react-router-dom";
 import { GET_TRIPS, GET_LOCATIONS_FOR_TRIPS } from '../query/query';
-import { Card, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 import TripsOnMap from './maps/TripsOnMap';
+import TripCard from './TripCard';
 
 import { TripI } from './../utility/types';
 
 const AllTrips: React.FC = () => {
     const result = useQuery(GET_TRIPS);
     const result2 = useQuery(GET_LOCATIONS_FOR_TRIPS);
+    const [filterTripIds, setFilterTripIds] = useState();
 
-    useEffect(() => {
-        if (result2.data) console.log("Result2", result2.data)
-    }, [result2])
+    // useEffect(() => {
+    //     if (result2.data) console.log("Result2", result2.data)
+    // }, [result2])
 
-    if (result.loading) return <>Loading</>;
+    const showTripCard = (trip: TripI) => {
+        if (!filterTripIds) return <TripCard trip={trip} key={trip._id} />
+        else if (trip._id && filterTripIds[trip._id]) return <TripCard trip={trip} key={trip._id} />
+        else return null;
+    }
 
-    if (result.error) return <>Error</>;
+    if (result.loading || result2.loading) return <>Loading</>;
+
+    if (result.error || result2.error) return <>Error</>;
 
     return (
         <div>
             <h1>All Trips</h1>
-            <TripsOnMap locations={result2.data.getLocationsforTrips} />
+            <h2>Filter trips by leg locations:</h2>
+            <TripsOnMap locations={result2.data.getLocationsforTrips} setFilterTripIds={setFilterTripIds} filterTripIds={filterTripIds} />
             <Grid container justifyContent="center" spacing={2}>
-                {result.data.allTrips.map((trip: TripI) => (
-                    <Grid key={trip._id} item>
-                        <Link to={`/trips/${trip._id}`}>
-                            <Card sx={{ width: 200, backgroundColor: '#98c1d9', textAlign: 'center', height: 150, display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '2px' }}>
-                                <h3>{trip.tripName}</h3>
-                                {trip.dayLength} {trip.dayLength === 1 ? 'day' : 'days'}
-                            </Card>
-                        </Link>
-                    </Grid>
-                ))}
+                {result.data.allTrips.map((trip: TripI) => showTripCard(trip))}
             </Grid>
         </div>
     );

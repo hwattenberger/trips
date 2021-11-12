@@ -22,7 +22,6 @@ const Register: React.FC<RegisterProps> = ({ setToken }) => {
 
     useEffect(() => {
         if (result.data && result.data.userCreate.value) {
-            console.log(result.data)
             const token = result.data.userCreate.value;
             setToken(token);
             localStorage.setItem('login-user-token', token);

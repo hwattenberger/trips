@@ -76,8 +76,6 @@ export const EditTrip: React.FC = () => {
 
     useEffect(() => {
         if (locationQuery.data) {
-            console.log("Trip", locationQuery.data.findTripById)
-
             const startDate = new Date(locationQuery.data.findTripById.startYear, locationQuery.data.findTripById.startMonth - 1, locationQuery.data.findTripById.startDay);
             setFrom(startDate);
             if (locationQuery.data.findTripById.dayLength) {

@@ -25,7 +25,7 @@ const NewLeg: React.FC<NewLegProps> = ({ startDt, endDt, updateLeg, ix, legInfo 
 
     useEffect(() => {
         setLegFrom(startDt);
-    }, [startDt]);
+    }, [startDt]); // eslint-disable-line
 
     const openDialog = () => {
         setOpenSearch(true);
@@ -78,15 +78,14 @@ const NewLeg: React.FC<NewLegProps> = ({ startDt, endDt, updateLeg, ix, legInfo 
 
         if (country_short_code) updatedLoc.country_short_code = country_short_code;
 
-        console.log("location", updatedLoc)
         updateLeg({ ...legInfo, "location": updatedLoc });
     }
 
-    const activityIcon = (type: string): string => {
-        if (type === "poi") return "🏰";
-        if (type === "food") return "🍜";
-        return "⛵";
-    }
+    // const activityIcon = (type: string): string => {
+    //     if (type === "poi") return "🏰";
+    //     if (type === "food") return "🍜";
+    //     return "⛵";
+    // }
 
     return (
         <div className="newTripLegDiv">

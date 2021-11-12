@@ -10,7 +10,6 @@ const TravelBetween: React.FC<TravelBetweenProps> = ({ leg }) => {
         switch (leg.travelAfter.method) {
             case 'plane':
                 return "✈ Plane"
-                break;
             case 'train':
                 return "🚅 Train"
             case 'car':
