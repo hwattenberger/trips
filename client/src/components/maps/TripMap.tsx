@@ -7,7 +7,7 @@ import { LocationI } from './../../utility/types';
 mapboxgl.accessToken = "pk.eyJ1IjoiaXdpc2hpaGFkIiwiYSI6ImNrdjJvejB4ZDBkb2cyb3A2bDY2YWY3eGoifQ.T-mys_-QQCK4CxmVnhiVxg";
 
 interface TripMapProps {
-    center: mapboxgl.LngLatLike,
+    center: any,
     locations: LocationsI[]
 }
 

@@ -5,7 +5,7 @@ import { GET_TRIP_INFO, GET_TRIP_LOCATIONS } from './../query/query'
 import { TripMap } from './maps/TripMap';
 import TravelBetween from './TravelBetween';
 import styled from 'styled-components';
-import { LegI } from '../utility/types';
+import { LegI, ActivityI } from '../utility/types';
 import Activity from './Activity';
 
 import { InView } from 'react-intersection-observer';
@@ -54,7 +54,7 @@ const Trip: React.FC = () => {
                     {center && <TripMap center={center} locations={locationQuery.data.findTripById.legs} />}
                 </Grid>
                 <Grid item xs={12} md={8}>
-                    {data.findTripById.legs.map((leg: LegI, ix: number) => (
+                    {data.findTripById.legs.map((leg: any, ix: number) => (
                         <InView as="div" key={leg._id} onChange={(inView) => updateMap(inView, leg)}>
                             <div className="newTripLegDiv establishedTripLegDiv">
                                 <h2>Leg {ix + 1} {leg.location && <>- {leg.location.place_name}</>}</h2>
@@ -64,7 +64,7 @@ const Trip: React.FC = () => {
                                     {leg.comments && <> {leg.comments}</>}
                                 </div>
                                 <div>
-                                    {leg.activities.map((activity) => (
+                                    {leg.activities.map((activity: ActivityI) => (
                                         <Activity key={activity._id} activity={activity} />
                                     ))}
                                 </div>
