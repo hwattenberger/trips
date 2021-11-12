@@ -32,7 +32,7 @@ const TripsOnMap: React.FC<TripsOnMapProps> = ({ locations, setFilterTripIds, fi
             zoom: 1
         });
 
-        const featureList = locations.map((loc) => {
+        const featureList: any = locations.map((loc) => {
             return {
                 'type': 'Feature',
                 'geometry': {
@@ -94,14 +94,14 @@ const TripsOnMap: React.FC<TripsOnMapProps> = ({ locations, setFilterTripIds, fi
         })
 
         newMap.on('click', 'clusters', (e) => {
-            const features = newMap.queryRenderedFeatures(e.point, {
+            const features: any = newMap.queryRenderedFeatures(e.point, {
                 layers: ['clusters']
             });
             const clusterId = features[0]?.properties?.cluster_id;
-            const source: mapboxgl.AnySourceImpl = newMap.getSource('tripLocations');
+            const source: any = newMap.getSource('tripLocations');
             source.getClusterExpansionZoom(
                 clusterId,
-                (err, zoom: number) => {
+                (err: string, zoom: number) => {
                     if (!err) {
                         newMap.easeTo({
                             center: features[0].geometry.coordinates,
@@ -122,7 +122,7 @@ const TripsOnMap: React.FC<TripsOnMapProps> = ({ locations, setFilterTripIds, fi
             })
         });
 
-        newMap.on('click', 'unclustered-point', (e: mapboxgl.MapLayerMouseEvent) => {
+        newMap.on('click', 'unclustered-point', (e: any) => {
             if (!e || !e.features) return "";
             const coordinates = e.features[0].geometry.coordinates.slice();
             const location_name = e.features[0].properties.location_name;

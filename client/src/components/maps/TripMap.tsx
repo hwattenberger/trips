@@ -38,7 +38,7 @@ export const TripMap: React.FC<TripMapProps> = ({ center, locations }) => {
             zoom: 3
         });
 
-        const featureList = locations.map((loc) => {
+        const featureList: any = locations.map((loc) => {
             return {
                 'type': 'Feature',
                 'geometry': {
