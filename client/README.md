@@ -62,18 +62,15 @@ User: hilary Password: hilary
 Here are some of the things that I learned:
 - JWT. I previously did authentication through sessions and I wanted to try using JWT.
 - GraphQL. This was one of the main reasons I did this project - I wanted to use graphQL full stack with Apollo. Great to experience something different and it was quite a change. I can see why some people really like it.
-- Lots of integration with mapbox. I had a lot of fun with mapbox and used it in many different ways. You could use forward geocoding and reverse geocoding. You could map out your trip. You could use clusters to drill down on a group of trips.
+- Lots of integration with Mapbox. I had a lot of fun with mapbox and used it in many different ways. You could use forward geocoding and reverse geocoding. You could map out your trip. You could use clusters to drill down on a group of trips.
+- react-intersection-observer. This was a great library for changing things as you scroll. When you scroll through a trip (if it has enough text), the map will zoom to each location.
 
 ## 🎈 Todos <a name="todos"></a>
-I have a long list of things I'd work on if I had more time.  Here are some of them:
-- Analytics.  I'd love to make a dashboard.  There aren't too many options with the data I currently collect so I'd need to capture some additional information
-- Email shifts.  I could integrate with somewhere like Twillio and auto send emails around scheduled shifts or have users request an email of their shifts
-- Better error handing
-- There's no great handling currently of what happens when shifts are changed from what they were before (for example you were scheduled for a shift type and then the shift type gets changed to a different role.  Very unlikely in the real world but still something I should handle better)
-- Responsiveness.  Most of the pages are reasonably responsive but there's certainly more work to be done.
-- More validation on forms.  I did this for the registration form to show that I could make it work but could do it on all forms
-- Way too much prop drilling on the scheduling page.  I'd move to useContext (if not something like Redux)
-- I'd move the API calls outside of components into their own hook
+Lots of areas where this can be improved including:
+- Better error handling
+- Ability to load trip images
+- More customization around activities in a leg
+- Improve design especially of the landing page
 
 ## ✍️ Author <a name = "authors"></a>
 - [@hwattenberger](https://github.com/hwattenberger)

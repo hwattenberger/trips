@@ -5,6 +5,8 @@ import './TripMap.css'
 import { Button } from '@mui/material';
 import { Geometry, GeoJsonProperties, Feature } from "geojson";
 
+// eslint-disable-next-line import/no-webpack-loader-syntax
+mapboxgl.workerClass = require('worker-loader!mapbox-gl/dist/mapbox-gl-csp-worker').default;
 mapboxgl.accessToken = "pk.eyJ1IjoiaXdpc2hpaGFkIiwiYSI6ImNrdjJvejB4ZDBkb2cyb3A2bDY2YWY3eGoifQ.T-mys_-QQCK4CxmVnhiVxg";
 
 interface TripsOnMapProps {
