@@ -3,7 +3,7 @@
  <img width=150px height=150px src="https://hilary-wattenberger.netlify.app/images/travel.ico" alt="TripsLogo"></a>
 </p>
 
-<h3 align="center">Trips - Sharing and view trips application</h3>
+<h3 align="center">Trips - Sharing and viewing trips application</h3>
 
 <div align="center">
 
