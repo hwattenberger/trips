@@ -34,6 +34,7 @@ When I took a sabbatical trip I wanted to see where other people had gone and wh
 
 ## ⛏️ Built Using <a name = "built_using"></a>
 - [React](https://reactjs.org/) - Front end framework
+- [Typescript](https://www.typescriptlang.org/) - Type definitions for Javascript (only used on the front-end)
 - [GraphQL](https://graphql.org/) - Query language
 - [Apollo](https://www.apollographql.com/) - Both client and server to work better with GraphQL
 - [MaterialUI](https://v4.mui.com/) - React UI components
