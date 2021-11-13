@@ -71,7 +71,8 @@ export const EditTrip: React.FC = () => {
         onError: (error) => {
             if (error.graphQLErrors[0]) setErr(error.graphQLErrors[0].message)
             else setErr("Updating trip was not successful");
-        }
+        },
+        refetchQueries: [{ query: GET_TRIP_INFO }]
     });
 
     useEffect(() => {

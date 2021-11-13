@@ -11,14 +11,15 @@ mapboxgl.accessToken = "pk.eyJ1IjoiaXdpc2hpaGFkIiwiYSI6ImNrdjJvejB4ZDBkb2cyb3A2b
 
 interface TripMapProps {
     center: any,
-    locations: LocationsI[]
+    locations: LocationsI[],
+    mapDisplay: string
 }
 
 interface LocationsI {
     location: LocationI
 }
 
-export const TripMap: React.FC<TripMapProps> = ({ center, locations }) => {
+export const TripMap: React.FC<TripMapProps> = ({ center, locations, mapDisplay }) => {
     const mapContainer = useRef<HTMLDivElement | null>(null);
     const [map, setMap] = useState<mapboxgl.Map | undefined>();
 
@@ -30,7 +31,7 @@ export const TripMap: React.FC<TripMapProps> = ({ center, locations }) => {
                 zoom: 8
             })
         }
-    }, [center]) // eslint-disable-line
+    }, [center, mapDisplay]) // eslint-disable-line
 
     useEffect(() => {
         const newMap = new mapboxgl.Map({
@@ -47,6 +48,9 @@ export const TripMap: React.FC<TripMapProps> = ({ center, locations }) => {
                 'geometry': {
                     'type': 'Point',
                     'coordinates': loc.location.center
+                },
+                'properties': {
+                    'location_name': loc.location.place_name
                 }
             }
         })
@@ -70,6 +74,31 @@ export const TripMap: React.FC<TripMapProps> = ({ center, locations }) => {
                 },
             })
 
+            newMap.on('click', 'legLocations', (e: any) => {
+                if (!e || !e.features) return "";
+                const coordinates = e.features[0].geometry.coordinates.slice();
+                const location_name = e.features[0].properties.location_name;
+
+                while (Math.abs(e.lngLat.lng - coordinates[0]) > 180) {
+                    coordinates[0] += e.lngLat.lng > coordinates[0] ? 360 : -360;
+                }
+
+                new mapboxgl.Popup()
+                    .setLngLat(coordinates)
+                    .setHTML(
+                        `Location: ${location_name}`
+                    )
+                    .addTo(newMap);
+            });
+
+            newMap.on('mouseenter', 'legLocations', () => {
+                newMap.getCanvas().style.cursor = 'pointer';
+            });
+            newMap.on('mouseleave', 'legLocations', () => {
+                newMap.getCanvas().style.cursor = '';
+            });
+
+
             setMap(newMap);
         })
 
@@ -79,6 +108,7 @@ export const TripMap: React.FC<TripMapProps> = ({ center, locations }) => {
     return (
         <div className="mapMultiPoint">
             <div ref={mapContainer} className="map-container" />
+            <span className="boldText">Displaying: {mapDisplay}</span>
         </div>
     );
 }

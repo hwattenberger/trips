@@ -26,6 +26,7 @@ const Trip: React.FC = () => {
     const { loading, data } = useQuery(GET_TRIP_INFO, { variables: { idOfTrip: tripId } });
     const locationQuery = useQuery(GET_TRIP_LOCATIONS, { variables: { idOfTrip: tripId } });
     const [center, setCenter] = useState<number[]>();
+    const [mapDisplay, setMapDisplay] = useState("Overall Trip Map");
 
     const monthArr = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
 
@@ -37,8 +38,11 @@ const Trip: React.FC = () => {
         return `${monthArr[data.findTripById.startMonth - 1]}`
     }
 
-    const updateMap = (inView: boolean, leg: LegI) => {
-        if (inView && leg.location && leg.location.center) setCenter(leg.location.center);
+    const updateMap = (inView: boolean, leg: LegI, ix: number) => {
+        if (inView && leg.location && leg.location.center) {
+            setMapDisplay(`Leg ${ix + 1}`)
+            setCenter(leg.location.center);
+        }
     }
 
     if (loading || locationQuery.loading) return <>Loading</>
@@ -51,11 +55,11 @@ const Trip: React.FC = () => {
                     {data.findTripById.description && <p>{data.findTripById.description}</p>}
                 </Grid>
                 <Grid item xs={12} md={4}>
-                    {center && <TripMap center={center} locations={locationQuery.data.findTripById.legs} />}
+                    {center && <TripMap center={center} locations={locationQuery.data.findTripById.legs} mapDisplay={mapDisplay} />}
                 </Grid>
                 <Grid item xs={12} md={8}>
                     {data.findTripById.legs.map((leg: any, ix: number) => (
-                        <InView as="div" key={leg._id} onChange={(inView) => updateMap(inView, leg)}>
+                        <InView as="div" key={leg._id} threshold={0.2} onChange={(inView) => updateMap(inView, leg, ix)}>
                             <div className="newTripLegDiv establishedTripLegDiv">
                                 <h2>Leg {ix + 1} {leg.location && <>- {leg.location.place_name}</>}</h2>
                                 {leg.endDay && <Subtitle>Day {leg.startDay} to Day {leg.endDay}</Subtitle>}
