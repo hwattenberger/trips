@@ -1,6 +1,6 @@
 <p align="center">
   <a href="" rel="noopener">
- <img width=200px height=200px src="https://hilary-wattenberger.netlify.app/images/date.png" alt="TripsLogo"></a>
+ <img width=200px height=200px src="https://hilary-wattenberger.netlify.app/images/travel.png" alt="TripsLogo"></a>
 </p>
 
 <h3 align="center">Trips - Sharing and view trips application</h3>
