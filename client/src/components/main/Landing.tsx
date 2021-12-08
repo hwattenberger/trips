@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Button, Card, Grid } from '@mui/material';
 import { Link } from 'react-router-dom';
 import { useQuery } from '@apollo/client';
+import { motion } from 'framer-motion';
 
 import mainImg from './../../images/mainpic.jpg';
 import mainImg2 from './../../images/mainpic2.jpg';
@@ -37,11 +38,7 @@ export const LandingMainImage = styled.div<LandingMainImageProps>`
 
 const imgArr = [mainImg, mainImg2, mainImg3, mainImg4];
 
-interface LandingProps {
-
-}
-
-const Landing: React.FC<LandingProps> = () => {
+const Landing: React.FC = () => {
     const [scrollImgNum, setScrollImgNum] = useState(0);
     const getFeaturedTrips = useQuery(GET_FEATURED_TRIPS);
 
@@ -61,10 +58,10 @@ const Landing: React.FC<LandingProps> = () => {
     return (
         <main>
             <LandingMainImage imgUrl={imgArr[scrollImgNum]}>
-                <div className="landingStarterDivText">
+                <motion.div className="landingStarterDivText" initial={{ scale: 2 }} animate={{ scale: 1 }} transition={{ duration: 1.5 }}>
                     <h1>Share Trip Experiences</h1>
                     <h2>Get Travel Inspiration</h2>
-                </div>
+                </motion.div>
             </LandingMainImage>
             <div className="landingSearch">
                 <Link to={`/register`}><Button variant="contained">Sign Up</Button></Link>
@@ -74,12 +71,14 @@ const Landing: React.FC<LandingProps> = () => {
                 <Grid container justifyContent="center" spacing={2}>
                     {getFeaturedTrips.data && getFeaturedTrips.data.findFeaturedTrips.map((trip: featuredTripI, ix: number) => (
                         <Grid key={trip._id} item>
-                            <Link to={`/trips/${trip._id}`}>
-                                <Card sx={{ width: 200, backgroundColor: '#98c1d9', textAlign: 'center', height: 150, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-                                    <h3>{trip.tripName}</h3>
-                                    {trip.dayLength} {trip.dayLength === 1 ? 'day' : 'days'}
-                                </Card>
-                            </Link>
+                            <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 2 }}>
+                                <Link to={`/trips/${trip._id}`}>
+                                    <Card sx={{ width: 200, backgroundColor: '#98c1d9', textAlign: 'center', height: 150, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
+                                        <h3>{trip.tripName}</h3>
+                                        {trip.dayLength} {trip.dayLength === 1 ? 'day' : 'days'}
+                                    </Card>
+                                </Link>
+                            </motion.div>
                         </Grid>
                     ))}
                 </Grid>

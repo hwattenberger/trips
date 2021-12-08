@@ -22,6 +22,7 @@
     "@types/styled-components": "^5.1.15",
     "axios": "^0.24.0",
     "dayjs": "^1.10.7",
+    "framer-motion": "^4.1.17",
     "graphql": "^15.6.1",
     "lodash.debounce": "^4.0.8",
     "mapbox-gl": "^2.5.1",
